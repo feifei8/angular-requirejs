@@ -1,0 +1,30 @@
+{
+  "name": "angular-requirejs",
+  "description": "",
+  "main": "",
+  "authors": [
+    "lujwa <407845252@qq.com>"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "angularjs#~1.4.8",
+    "AdminLTE": "admin-lte#~2.3.2",
+    "requirejs": "~2.1.22",
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.6",
+    "angular-route": "~1.4.8",
+    "jquery-ui": "~1.11.4",
+    "Ionicons": "ionicons#~2.0.1",
+    "raphael": "~2.1.4",
+    "angular-mocks": "~1.4.8"
+  }
+}
