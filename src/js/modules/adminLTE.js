@@ -14,7 +14,9 @@ define([
     'demo',
     'ionslider',
     'bootstrap-slider',
-    'slimscroll'
+    'slimscroll',
+    "ordermodule"
+
 ], function(angular) {
     angular.module('myApp.adminLTE', ['ngRoute'])
         .config(['$routeProvider', function($routeProvider) {
@@ -130,5 +132,6 @@ define([
         $routeProvider.when('/examples/pace', {
             templateUrl: 'pages/examples/pace.html'
         });
+
         }]);
 });

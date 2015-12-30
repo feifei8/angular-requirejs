@@ -4,7 +4,7 @@ define([
 
 ],function(angular){
 	angular.module('Order.OrderManagerController',[])
-	.controller('orderManagerCtrl',['orderManagerService','$scope','NgTableParams','_',
+	.controller('orderCtrl',['orderService','$scope','NgTableParams','_',
         function(orderManagerService,$scope,NgTableParams,_){
 		//  ==========
 		//  = 方法配置 =

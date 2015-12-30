@@ -50,15 +50,23 @@ require.config({
         //ADMINLTE_MODULES
         'adminLTEmodule':"modules/adminLTE",
         //order
-        'mainThirdPlug':'services/mainThirdPlug.js',
+        //orderModule
+        'ordermodule':'modules/order/ordermodule',
+        //MD5加密文件
+        'angular-md5':'../../public/lib/angular-md5/angular-md5',
+        'mainThirdPlug':'services/mainThirdPlug.js（废弃明天删）',
+        //ngtable表格
         'ngtable':'../../plugins/ngtable/ngtable.v1.0.0',
         'underscore':'../../plugins/Underscore/underscore-min',
-        //服务文件
-        'YYPlug.ThirdPlug':'services/YYPlug.ThirdPlug',
-        'Order.OrderManagerService':'services/Order.OrderManagerService',
-        'mainService':'services/mainService',
-        'MD5Service':'services/MD5Service.js',
-        'OrderManagerController':'controllers/Order.OrderManagerController',
+        //service
+        //订单api服务
+        'publicApi':'services/publicApi/orderApi',
+        //订单服务
+        'orderservice':'services/order/orderservice',
+        'Order.OrderManagerService':'services/Order.OrderManagerService.js（废弃明天删）',
+        //controller
+        'orderCtrl':'controllers/order/orderctrl',
+        'OrderManagerController':'controllers/Order.OrderManagerController.js（废弃明天删）',
         'mainController':'controllers/mainController'
 
 },
