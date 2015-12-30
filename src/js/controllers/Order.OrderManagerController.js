@@ -169,9 +169,6 @@ define([
 				return r.id==item.id;
 			});
 		}
-            function test (){
-				alert('测试数据');
-			}
 		//移除指定数据
 		function remove(item){
 			for( var i=0;i<orderDataCopy.length;i++){
