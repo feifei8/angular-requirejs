@@ -1,0 +1,261 @@
+{
+    "Data": {
+        "Status": "0",
+        "Description": "SUCCESS",
+        "Body": {
+            "EntityName": "Product",
+            "ActionType": "getProduct",
+            "RowCount": "164",
+            "Product": [
+                {
+                    "ProductID": "0102010104",
+                    "ProductName": "用友GRP-U8乡镇财政-选配模块",
+                    "ParentProduct": "01020101"
+                },
+                {
+                    "ProductID": "0102010306",
+                    "ProductName": "用友GRP-U8教育（普通高校升级版B套餐）",
+                    "ParentProduct": "01020103"
+                },
+                {
+                    "ProductID": "0102016401",
+                    "ProductName": "用友GRP-U8行政事业财务（G版）R9i",
+                    "ParentProduct": "01020164"
+                },
+                {
+                    "ProductID": "0102020106",
+                    "ProductName": "A++财政-预算执行（非税）",
+                    "ParentProduct": "01020201"
+                },
+                {
+                    "ProductID": "0102020218",
+                    "ProductName": "A++计划财务-档案管理",
+                    "ParentProduct": "01020202"
+                },
+                {
+                    "ProductID": "0102020402",
+                    "ProductName": "A++社保软件V6.X--基金监管数据采集",
+                    "ParentProduct": "01020204"
+                },
+                {
+                    "ProductID": "01020206",
+                    "ProductName": "临时",
+                    "ParentProduct": "010202"
+                },
+                {
+                    "ProductID": "01020268",
+                    "ProductName": "A++计划财务V7.X",
+                    "ParentProduct": "010202"
+                },
+                {
+                    "ProductID": "0102010204",
+                    "ProductName": "用友GRP-U8行政事业财务（普及基础版）",
+                    "ParentProduct": "01020102"
+                },
+                {
+                    "ProductID": "0102020207",
+                    "ProductName": "A++计划财务-会计核算（离线版）",
+                    "ParentProduct": "01020202"
+                },
+                {
+                    "ProductID": "0102020210",
+                    "ProductName": "A++计划财务-部门收入",
+                    "ParentProduct": "01020202"
+                },
+                {
+                    "ProductID": "0102020211",
+                    "ProductName": "GRP-A++财务移动应用",
+                    "ParentProduct": "01020202"
+                },
+                {
+                    "ProductID": "01020261",
+                    "ProductName": "A++财政 V3.X",
+                    "ParentProduct": "010202"
+                },
+                {
+                    "ProductID": "0102100201",
+                    "ProductName": "A++财政SPS",
+                    "ParentProduct": "01021002"
+                },
+                {
+                    "ProductID": "0102100205",
+                    "ProductName": "A++教育SPS",
+                    "ParentProduct": "01021002"
+                },
+                {
+                    "ProductID": "0102010310",
+                    "ProductName": "用友GRP-U8教育（高职高专升级版C套餐）",
+                    "ParentProduct": "01020103"
+                },
+                {
+                    "ProductID": "0102010503",
+                    "ProductName": "用友GRP-U8卫生（B版）",
+                    "ParentProduct": "01020105"
+                },
+                {
+                    "ProductID": "0102020109",
+                    "ProductName": "A++财政-会计管理",
+                    "ParentProduct": "01020201"
+                },
+                {
+                    "ProductID": "01020280",
+                    "ProductName": "GRP-A++移动应用",
+                    "ParentProduct": "010202"
+                },
+                {
+                    "ProductID": "0102028001",
+                    "ProductName": "GRP-A++移动应用V6.X",
+                    "ParentProduct": "01020280"
+                },
+                {
+                    "ProductID": "010202800105",
+                    "ProductName": "GRP-A++教育移动应用",
+                    "ParentProduct": "0102028001"
+                },
+                {
+                    "ProductID": "01020101",
+                    "ProductName": "GRP-U8财政 V10",
+                    "ParentProduct": "010201"
+                },
+                {
+                    "ProductID": "0102010901",
+                    "ProductName": "GRP-R9财务（政务版）",
+                    "ParentProduct": "01020109"
+                },
+                {
+                    "ProductID": "0102020204",
+                    "ProductName": "A++计划财务-资产采购过程管控",
+                    "ParentProduct": "01020202"
+                },
+                {
+                    "ProductID": "0102030108",
+                    "ProductName": "A++政法软件V6.X--政法行业通用产品",
+                    "ParentProduct": "01020301"
+                },
+                {
+                    "ProductID": "01020161",
+                    "ProductName": "GRP-U8财政 R9",
+                    "ParentProduct": "010201"
+                },
+                {
+                    "ProductID": "0102100202",
+                    "ProductName": "A++计划财务SPS",
+                    "ParentProduct": "01021002"
+                },
+                {
+                    "ProductID": "0102010502",
+                    "ProductName": "用友GRP-U8卫生（C版）",
+                    "ParentProduct": "01020105"
+                },
+                {
+                    "ProductID": "01020164",
+                    "ProductName": "用友GRP-U8行政事业财务 R9i",
+                    "ParentProduct": "010201"
+                },
+                {
+                    "ProductID": "0102020205",
+                    "ProductName": "A++计划财务-支付业务经办",
+                    "ParentProduct": "01020202"
+                },
+                {
+                    "ProductID": "0102020219",
+                    "ProductName": "A++财务其他软件",
+                    "ParentProduct": "01020202"
+                },
+                {
+                    "ProductID": "010202800106",
+                    "ProductName": "GRP-A++政法移动应用",
+                    "ParentProduct": "0102028001"
+                },
+                {
+                    "ProductID": "0102010105",
+                    "ProductName": "U8财政其他软件",
+                    "ParentProduct": "01020101"
+                },
+                {
+                    "ProductID": "0102010205",
+                    "ProductName": "用友GRP-U8行政事业财务（账表资产基础版）",
+                    "ParentProduct": "01020102"
+                },
+                {
+                    "ProductID": "0102010304",
+                    "ProductName": "用友GRP-U8教育（普及基础版）",
+                    "ParentProduct": "01020103"
+                },
+                {
+                    "ProductID": "0102010308",
+                    "ProductName": "用友GRP-U8教育（高职高专升级版A套餐）",
+                    "ParentProduct": "01020103"
+                },
+                {
+                    "ProductID": "01020107",
+                    "ProductName": "GRP-U8其他",
+                    "ParentProduct": "010201"
+                },
+                {
+                    "ProductID": "0102010201",
+                    "ProductName": "用友GRP-U8行政事业财务（G版）",
+                    "ParentProduct": "01020102"
+                },
+                {
+                    "ProductID": "0102016101",
+                    "ProductName": "用友GRP-U8财政 R9",
+                    "ParentProduct": "01020161"
+                },
+                {
+                    "ProductID": "0102016501",
+                    "ProductName": "用友GRP-U8行政事业财务（G版）V10.0.0",
+                    "ParentProduct": "01020165"
+                },
+                {
+                    "ProductID": "0102020105",
+                    "ProductName": "A++财政-决策支持",
+                    "ParentProduct": "01020201"
+                },
+                {
+                    "ProductID": "0102020213",
+                    "ProductName": "A++计划财务-财务监督",
+                    "ParentProduct": "01020202"
+                },
+                {
+                    "ProductID": "0102020215",
+                    "ProductName": "A++计划财务-汇总统计",
+                    "ParentProduct": "01020202"
+                },
+                {
+                    "ProductID": "01020263",
+                    "ProductName": "A++财政 原方正春元区县版",
+                    "ParentProduct": "010202"
+                },
+                {
+                    "ProductID": "010202800104",
+                    "ProductName": "GRP-A++社保移动应用",
+                    "ParentProduct": "0102028001"
+                },
+                {
+                    "ProductID": "0102100203",
+                    "ProductName": "A++税务SPS",
+                    "ParentProduct": "01021002"
+                },
+                {
+                    "ProductID": "0102010301",
+                    "ProductName": "用友GRP-U8教育（G版）",
+                    "ParentProduct": "01020103"
+                },
+                {
+                    "ProductID": "0102010307",
+                    "ProductName": "用友GRP-U8教育（普通高校升级版C套餐）",
+                    "ParentProduct": "01020103"
+                },
+                {
+                    "ProductID": "01020105",
+                    "ProductName": "用友GRP-U8卫生财务V10",
+                    "ParentProduct": "010201"
+                },
+                {
+                    "ProductID": "01020109"
+                }
+            ]
+        }
+    }
+}
