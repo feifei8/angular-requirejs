@@ -1,0 +1,146 @@
+<div>home</div>
+<!--<div class="container">-->
+    <!--<div  class="container">-->
+        <!--<div ng-show="error" class="alert alert-danger alert-dismissible" role="alert">-->
+            <!--<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>-->
+            <!--<p>{{ error }}</p>-->
+        <!--</div>-->
+
+        <!--<p><a data-ng-click="showadd()" href="javascript:;" class="btn btn-primary">Add New User</a></p>-->
+
+        <!--<div class="modal fade" id="userModel" tabindex="-1" role="dialog" aria-hidden="true">-->
+            <!--<div class="modal-dialog">-->
+                <!--<div class="modal-content">-->
+                    <!--<div class="modal-header">-->
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>-->
+                        <!--<h4 class="modal-title" id="myModalLabel1" ng-hide="editMode">Add User</h4>-->
+                        <!--<h4 class="modal-title" id="myModalLabel2" ng-show="editMode">Edit User</h4>-->
+                    <!--</div>-->
+                    <!--<div class="modal-body">-->
+                        <!--<form class="form-horizontal" role="form" name="adduserform">-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="title" class="col-sm-2 control-label">Name</label>-->
+                                <!--<div class="col-sm-10">-->
+                                    <!--<input type="text" data-ng-model="user.Name" class="form-control" id="userName" placeholder="Your Name" required title="Enter your name" />-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="title" class="col-sm-2 control-label">Address</label>-->
+                                <!--<div class="col-sm-10">-->
+                                    <!--<input type="text" data-ng-model="user.Address" class="form-control" id="userAddress" placeholder="Your Address" required title="Enter your address" />-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="title" class="col-sm-2 control-label">ContactNo</label>-->
+                                <!--<div class="col-sm-10">-->
+                                    <!--<input type="text" data-ng-model="user.ContactNo" class="form-control" id="userContactNo" placeholder="Your ContactNo" required title="Enter your contactno" />-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-sm-offset-2 col-sm-10">-->
+ <!--<span data-ng-hide="editMode">-->
+ <!--<input type="submit" value="Add" ng-disabled="adduserform.$invalid" data-ng-click="add()" class="btn btn-primary" />-->
+ <!--</span>-->
+ <!--<span data-ng-show="editMode">-->
+ <!--<input type="submit" value="Update" ng-disabled="adduserform.$invalid" data-ng-click="update()" class="btn btn-primary" />-->
+ <!--</span>-->
+                                    <!--<input type="button" value="Cancel" data-ng-click="cancel()" class="btn btn-primary" />-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</form>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<h1>Users List</h1>-->
+        <!--<table class="table table-hover">-->
+            <!--<tr>-->
+                <!--<th>User ID</th>-->
+                <!--<th>Name</th>-->
+                <!--<th>Address</th>-->
+                <!--<th>Contact No</th>-->
+                <!--<th>Actions</th>-->
+            <!--</tr>-->
+
+            <!--<tr data-ng-repeat="user in users">-->
+                <!--<td><strong>{{ user.UserId }}</strong></td>-->
+                <!--<td>-->
+                    <!--<p>{{ user.Name }}</p>-->
+
+                <!--</td>-->
+                <!--<td>-->
+                    <!--<p>{{ user.Address}}</p>-->
+
+                <!--</td>-->
+                <!--<td>-->
+                    <!--<p>{{ user.ContactNo }}</p>-->
+
+                <!--</td>-->
+                <!--<td>-->
+                    <!--<p>-->
+                        <!--<a data-ng-click="get(user)" href="javascript:;">View</a> |-->
+                        <!--<a data-ng-click="edit(user)" href="javascript:;">Edit</a> |-->
+                        <!--<a data-ng-click="showconfirm(user)" href="javascript:;">Delete</a>-->
+                    <!--</p>-->
+
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</table>-->
+        <!--<hr />-->
+
+        <!--<div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-hidden="true">-->
+            <!--<div class="modal-dialog">-->
+                <!--<div class="modal-content">-->
+                    <!--<div class="modal-header">-->
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>-->
+                        <!--<h4 class="modal-title" id="myModalLabel3">View User</h4>-->
+                    <!--</div>-->
+                    <!--<div class="modal-body">-->
+                        <!--<form class="form-horizontal" role="form" name="viewuser">-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="Name" class="col-sm-2 control-label">Name</label>-->
+                                <!--<div class="col-sm-10">-->
+                                    <!--{{user.Name}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="Address" class="col-sm-2 control-label">Address</label>-->
+                                <!--<div class="col-sm-10">-->
+                                    <!--{{user.Address}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label for="ContactNo" class="col-sm-2 control-label">ContactNo</label>-->
+                                <!--<div class="col-sm-10">-->
+                                    <!--{{user.ContactNo}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</form>-->
+                    <!--</div>-->
+                    <!--<div class="modal-footer">-->
+                        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">-->
+            <!--<div class="modal-dialog">-->
+                <!--<div class="modal-content">-->
+                    <!--<div class="modal-header">-->
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>-->
+                        <!--<h4 class="modal-title" id="myModalLabel">Confirm Action</h4>-->
+                    <!--</div>-->
+                    <!--<div class="modal-body">-->
+                        <!--Are you sure to delete?-->
+                    <!--</div>-->
+                    <!--<div class="modal-footer">-->
+                        <!--<button type="button" class="btn btn-default" data-ng-click="delete()">Ok</button>-->
+                        <!--<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->

@@ -25,6 +25,10 @@
     "jquery-ui": "~1.11.4",
     "Ionicons": "ionicons#~2.0.1",
     "raphael": "~2.1.4",
-    "angular-mocks": "~1.4.8"
+    "angular-mocks": "~1.4.8",
+    "angular-cookies": "~1.4.8",
+    "angularLocalStorage": "ngStorage#~0.3.2",
+    "angular-ui": "~0.4.0",
+    "angular-ui-router": "~0.2.15"
   }
 }

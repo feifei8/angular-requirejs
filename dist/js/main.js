@@ -31,7 +31,9 @@ require.config({
         'LTEapp': '../../public/lib/AdminLTE/app',
         'dashboard':'../../dist/js/pages/dashboard',
         'dashboard2':'../../dist/js/pages/dashboard2',
-        'demo':'../../dist/js/demo'
+        'demo':'../../dist/js/demo',
+        'ionslider':'../../plugins/ionslider/ion.rangeSlider.min',
+        'bootstrap-slider':'../../plugins/bootstrap-slider/bootstrap-slider'
 
 },
     shim:{
@@ -52,7 +54,13 @@ require.config({
         },
         'demo':{
             "deps" :['jquery','bootstrap']
+        },
+        'ionslider':{
+            "deps" :['jquery']
         }
+        //'bootstrap-slider':{
+        //    "deps" :['jquery']
+        //}
 
 
 },

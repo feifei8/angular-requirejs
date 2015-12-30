@@ -1,4 +1,11 @@
-angular.module('Order.OrderManagerService',[]).factory('orderManagerService',['$http','MD5Service',function($http,MD5Service){
+define([
+
+],function(){
+
+
+});
+angular.module('Order.OrderManagerService',[])
+	.factory('orderManagerService',['$http','MD5Service', function($http,MD5Service){
 	var orderDataUrl='../../src/json/OrderData.json';
 	var orderCpsxDataUrl='../../src/json/productLine.json';
 	var orderCpDataUrl='../../src/json/products.json';

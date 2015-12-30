@@ -8,8 +8,13 @@ define([
     'angularRoute',
     'jquery',
     'bootstrap',
+    'raphael',
+    'knob-Chart',
+    'sparkline',
     'LTEapp',
     'demo',
+    'ionslider',
+    'bootstrap-slider',
     'modules/index',
     'modules/index2'
 
@@ -50,6 +55,39 @@ define([
         $routeProvider.when('/widgets', {
             templateUrl: 'pages/widgets.html'
         });
+        //图表
+        $routeProvider.when('/charts/chartjs', {
+            templateUrl: 'pages/charts/chartjs.html'
+        });
+        $routeProvider.when('/charts/morris', {
+            templateUrl: 'pages/charts/morris.html'
+        });
+        $routeProvider.when('/charts/flot', {
+            templateUrl: 'pages/charts/flot.html'
+        });
+        $routeProvider.when('/charts/inline', {
+            templateUrl: 'pages/charts/inline.html'
+        });
+        //UI
+        $routeProvider.when('/UI/general', {
+            templateUrl: 'pages/UI/general.html'
+        });
+        $routeProvider.when('/UI/icons', {
+            templateUrl: 'pages/UI/icons.html'
+        });
+        $routeProvider.when('/UI/buttons', {
+            templateUrl: 'pages/UI/buttons.html'
+        });
+        $routeProvider.when('/UI/sliders', {
+            templateUrl: 'pages/UI/sliders.html'
+        });
+        $routeProvider.when('/UI/timeline', {
+            templateUrl: 'pages/UI/timeline.html'
+        });
+        $routeProvider.when('/UI/modals', {
+            templateUrl: 'pages/UI/modals.html'
+        });
+
         $routeProvider.otherwise({redirectTo: '/index2'});
     }]);
 });

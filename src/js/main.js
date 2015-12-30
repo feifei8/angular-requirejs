@@ -40,6 +40,7 @@ require.config({
 
         'ngStorage': '../../public/lib/angularLocalStorage/angularLocalStorage',
         'ngCookies': '../../public/lib/angular-cookies/angular-cookies',
+
         //USER DEMO
         'service': 'serRvices/service',
         'homeCtrl': "controllers/homeCtrl",
@@ -47,7 +48,18 @@ require.config({
         'homeModule':"modules/homeModule",
         //'filter': "js/filters/filter"
         //ADMINLTE_MODULES
-        'adminLTEmodule':"modules/adminLTE"
+        'adminLTEmodule':"modules/adminLTE",
+        //order
+        'mainThirdPlug':'services/mainThirdPlug.js',
+        'ngtable':'../../plugins/ngtable/ngtable.v1.0.0',
+        'underscore':'../../plugins/Underscore/underscore-min',
+        //服务文件
+        'YYPlug.ThirdPlug':'services/YYPlug.ThirdPlug',
+        'Order.OrderManagerService':'services/Order.OrderManagerService',
+        'mainService':'services/mainService',
+        'MD5Service':'services/MD5Service.js',
+        'OrderManagerController':'controllers/Order.OrderManagerController',
+        'mainController':'controllers/mainController'
 
 },
     shim:{
@@ -60,6 +72,9 @@ require.config({
         'angularRoute':{
             deps:['angular','jquery'],
             exports: 'angular'
+        },
+        'underscore':{
+            exports: '_'
         },
         'angular-ui-router': {
             deps: ['angular'],

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN" ng-app="myapp">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title></title>
+		<link href="../../public/lib/bootstrap/bootstrap.css" type="text/css" rel="stylesheet" />
+		<link href="../../plugins/ngTable/ngtable.v1.0.0.css" type="text/css" rel="stylesheet"/>
+		<style>
+			.container-fluid>div{margin:20px auto;}
+			.col-md-4{margin: 10px auto;}
+			.select{
+				box-sizing: border-box;
+			    width: 50%;
+			    height: 34px;
+			    padding: 6px 0;
+			    font-size: 14px;
+			    line-height: 1.42857143;
+			    color: #555;
+			    background-color: #fff;
+			    background-image: none;
+			    border: 1px solid #ccc;
+			    border-radius: 4px;
+			    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+			    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+			    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+			    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+			    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+				margin-right: -43%;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container-fluid" ng-controller="orderManagerCtrl">
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<h3 class="h3 te">采购审批单</h3>
+				</div>
+			</div>
+			<div class="row text-center">
+				<div class="col-md-4">审批人：
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>	
+				</div>
+				<div class="col-md-4">审批时间：
+					<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				</div>
+				<div class="col-md-4">
+					<br />
+				</div>
+				<div class="col-md-4">
+					产品线：
+						<select  class="select" ng-model="productLine" ng-options=" baseProduct.OptionText as baseProduct.OptionText for baseProduct in baseProductdata"></select>
+				</div>
+				<div class="col-md-4">应用类型：
+					<select class="select" ng-model="saleType" ng-options=" saleType.PK_Option as saleType.OptionText for saleType in saleTypeData"></select>
+				</div>
+				<div class="col-md-4">销售模式：
+					<select class="select" ng-model="saleTypeModel" ng-options=" saleTypeModel.OptionText as saleTypeModel.OptionText for saleTypeModel in saleModelTypeData"></select>
+				</div>
+				<div class="col-md-4">
+					<span>成交价：{{AllCoust}}￥</span>
+				</div>
+				<div class="col-md-4">
+					<span>报价：{{AllQuote}}￥</span>
+				</div>
+				<div class="col-md-4">
+					<span>折扣：{{AllDiscount}}%</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<h4>订单详情</h3>
+				</div>
+				<div class="col-md-12">
+					  <div class="brn-group pull-right">
+				        <button class="btn btn-default" ng-click="add();">
+				          <span class="glyphicon glyphicon-plus"></span>
+				        </button>
+				      </div>
+					<table class="table table-hover editable-table table-responsive table-bordered table-condensed table-striped" ng-table="tableParams"  ng-form="tableForm" disable-filter="isAdding" tracked-table="tableTracker">
+							<colgroup>
+					          <col width="15%" />
+					          <col width="25%" />
+					          <col width="20%" />
+					          <col width="10%" />
+					          <col width="10%" />
+					          <col width="10%" />
+					          <col width="10%" />
+					        </colgroup>
+						<tr ng-repeat="item in $data" ng-form="itemForm" tracked-table-row="item">
+							<td data-title="'产品线'" sortable="'ProductLineName'" ng-switch="item.isEditing" ng-class="ProductLineName.$dirty ? 'bg-warning' : ''" ng-form="ProductLineName" tracked-table-cell>
+								<span ng-switch-default class="editable-text" ng-bind="item.ProductLineName"></span>
+								<div class="controls" ng-class="ProductLineName.$invalid && ProductLineName.$dirty ? 'has-error' : ''" ng-switch-when="true">
+									<select name="ProductLineName" ng-model="item.ProductLineName" class="form-control" 
+									ng-options="cpx.ProductLineName as cpx.ProductLineName for cpx in cpsxdatas" ng-selected="item.ProductLineName == cpx.ProductLineName">
+									</select>
+            					</div>
+							</td>
+							<td data-title="'产品'"  sortable="'ProductName'"  ng-switch="item.isEditing" ng-class="ProductName.$dirty ? 'bg-warning' : ''" ng-form="ProductName" tracked-table-cell>
+								<span ng-switch-default class="editable-text" ng-bind="item.ProductName"></span>
+								<div class="controls" ng-class="ProductName.$invalid && ProductName.$dirty ? 'has-error' : ''" ng-switch-when="true">
+									<select name="ProductName" ng-model="item.ProductName" class="form-control" ng-change="getCpModule(item.ProductName)" ng-options="propduct.ProductName as propduct.ProductName for propduct in propductdatas" ng-selected="item.cp==propduct.ProductName">
+										
+									</select>
+            					</div>
+							</td>
+							<td data-title="'产品模块'"  sortable="'ProductModuleName'"  ng-switch="item.isEditing" ng-class="ProductModuleName.$dirty ? 'bg-warning' : ''" ng-form="ProductModuleName" tracked-table-cell>
+								<span ng-switch-default class="editable-text" ng-bind="item.ProductModuleName"></span>
+								<div class="controls" ng-class="ProductModuleName.$invalid && ProductModuleName.$dirty ? 'has-error' : ''" ng-switch-when="true">
+									<select name="ProductModuleName" ng-model="item.ProductModuleName" class="form-control" ng-options="propductmodule.ProductModuleName as propductmodule.ProductModuleName for propductmodule in moduledata" ng-selected="item.ProductModuleName==propductmodule.ProductmoduleName">
+									</select>
+            					</div>
+							</td>
+							<td data-title="'报价'"  sortable="'Quote'"  ng-switch="item.isEditing" ng-class="Quote.$dirty ? 'bg-warning' : ''" ng-form="Quote" demo-tracked-table-cell>
+								<span ng-switch-default class="editable-text" ng-bind="item.Quote"></span>
+								<div class="controls" ng-class="Quote.$invalid && Quote.$dirty ? 'has-error' : ''" ng-switch-when="true">
+									  <input type="number" name="Quote"ng-model="item.Quote" class="editable-input form-control input-sm" required />
+            					</div>
+							</td>
+							<td data-title="'成交价'" sortable="'RelCost'"  ng-switch="item.isEditing" ng-class="RelCost.$dirty ? 'bg-warning' : ''" ng-form="RelCost" demo-tracked-table-cell>
+								<span ng-switch-default class="editable-text" ng-bind="item.RelCost"></span>
+								<div class="controls" ng-class="RelCost.$invalid && RelCost.$dirty ? 'has-error' : ''" ng-switch-when="true">
+									  <input type="number" name="RelCost" ng-model="item.RelCost" class="editable-input form-control input-sm" required />
+            					</div>
+							</td>
+							<td data-title="'折扣'" sortable="'Discount'" ng-switch="item.isEditing" ng-class="Discount.$dirty ? 'bg-warning' : ''" ng-form="Discount" demo-tracked-table-cell>
+								<span ng-switch-default class="editable-text" ng-bind="item.Discount"></span>
+								<div class="controls" ng-class="Discount.$invalid && Discount.$dirty ? 'has-error' : ''" ng-switch-when="true">
+									  <input type="number" name="Discount" ng-model="item.Discount" class="editable-input form-control input-sm" required />
+            					</div>
+							</td>
+							<td> 
+								<button class="btn btn-primary btn-sm" ng-click="save(item, itemForm)" ng-if="item.isEditing" ng-disabled="itemForm.$pristine || itemForm.$invalid">
+									<span class="glyphicon glyphicon-ok"></span>
+								</button>
+            					<button class="btn btn-default btn-sm" ng-click="cancel(item, itemForm)" ng-if="item.isEditing">
+            						<span class="glyphicon glyphicon-remove"></span>
+            					</button>
+								<button class="btn btn-default btn-sm" ng-click="item.isEditing = true" ng-if="!item.isEditing">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</button>
+								  <button class="btn btn-danger btn-sm" ng-click="del(item)" ng-if="!item.isEditing">
+								  	<span class="glyphicon glyphicon-trash"></span>
+								  </button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!--  = bootstrap依赖文件 =  -->
+		<script src="../../plugins/jQuery/jQuery-2.1.4.min.js"></script>
+		<script src="../../public/lib/bootstrap/bootstrap.js"></script>
+		<!--  = 主文件 =  -->
+		<script src="../../public/lib/angular/angular.js"></script>
+		<script src="../../src/js/modules/app.js"></script>
+		<!--  = 依赖文件 =  -->
+		<script src="../../dist/js/services/mainThirdPlug.js"></script>
+		<script src="../../plugins/ngTable/ngtable-v.1.0.0.min.js"></script>
+		<script src="../../plugins/Underscore/underscore-min.js"></script>
+		<!--  = 服务文件 =  -->
+		<script src="../../src/js/services/YYPlug.ThirdPlug.js"></script>
+		<script src="../../src/js/services/Order.OrderManagerService.js"></script>
+		<script src="../../src/js/services/mainService.js"></script>
+		<script src="../../src/js/services/MD5Service.js"></script>
+		<!--  = 控制器文件 =  -->
+		<script src="../../src/js/controllers/Order.OrderManagerController.js"></script>
+		<script src="../../src/js/controllers/mainController.js"></script>
+	</body>
+</html>
