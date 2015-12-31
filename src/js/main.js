@@ -42,7 +42,7 @@ require.config({
         'ngCookies': '../../public/lib/angular-cookies/angular-cookies',
 
         //USER DEMO
-        'service': 'serRvices/service',
+        'service': 'services/service',
         'homeCtrl': "controllers/homeCtrl",
         'aboutCtrl': "controllers/accountCtrl",
         'homeModule':"modules/homeModule",
@@ -50,17 +50,12 @@ require.config({
         //ADMINLTE_MODULES
         'adminLTEmodule':"modules/adminLTE",
         //order
-        'mainThirdPlug':'services/mainThirdPlug.js',
         'ngtable':'../../plugins/ngtable/ngtable.v1.0.0',
         'underscore':'../../plugins/Underscore/underscore-min',
-        //服务文件
-        'YYPlug.ThirdPlug':'services/YYPlug.ThirdPlug',
-        'Order.OrderManagerService':'services/Order.OrderManagerService',
-        'mainService':'services/mainService',
-        'MD5Service':'services/MD5Service.js',
-        'OrderManagerController':'controllers/Order.OrderManagerController',
-        'mainController':'controllers/mainController'
-
+        'order_service':'services/order/order_service',
+        'md5_service':'services/order/md5_service',
+        'order_controller':'controllers/Order/order_controller',
+        'order_module':'modules/order_module'
 },
     shim:{
         //引入没有使用requirejs模块写法的类库。例如underscore这个类库，本来会有一个全局变量'_'。这里shim等于快速定义一个模块，
@@ -106,8 +101,6 @@ require.config({
         //'bootstrap-slider':{
         //    "deps" :['jquery']
         //}
-
-
 },
     priority: [
         "angular"
