@@ -1,5 +1,5 @@
 /**
- * Created by wbchengs on 2015/12/30.
+ * Created by wbchengs on 2015/12/31.
  */
 define([
     'angular',
@@ -8,281 +8,287 @@ define([
     'underscore',
     'underscoreservice'
 ],function(angular){
-    angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable','UnderscoreService'])
-        .controller('orderCtrl',['orderservice','$scope','NgTableParams','_',
-            function(orderservice,$scope,NgTableParams,_){
-                //  ==========
-                //  = 方法配置 =
-                //  ==========
+angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable','UnderscoreService'])
+    .controller('orderCtrl',['orderservice','$scope','NgTableParams','_',
+        function(orderservice,$scope,NgTableParams,_){
+        /************非计算项目 ************/
+            //  ==========
+            //  = 对象 =
+            //  ==========
+        $scope.AllOrderManagerList=[];//整体对象
 
-                $scope.orderdata={};
-                $scope.saleTypeData=null;
-                $scope.saleModelTypeData=null;
-                $scope.baseProductdata=null;
-                $scope.AllOrdersList=[];
-                var AllOrders={};
-                $scope.tableParams=null;//表格对象
-                var temp=[];
-                var orderDataCopy=[];//订单对象
-                var tempData=[];
-                var i=0;
-                $scope.isShow={
-                    isShow:false
-                };
-                $scope.isSubmit={
-                    isSubmit:true
-                }
-                $scope.daty=GetDate();
-                $scope.isShow2=false;
-                $scope.deleteCount=0;
-                $scope.cpsxdatas=[];//产品线对象
-                $scope.propductdatas=[];//产品对象
-                $scope.moduledata=[];//产品模块对象
-                window.localStorage.setItem("id",1);
-                $scope.cancel=cancel;
-                $scope.del=del;
-                $scope.save=save;
-                $scope.add=add;
-                $scope.getCpModule=getCpModule;
-                $scope.showOrder=showOrder;
-                $scope.cancelChanges=cancelChanges;
-                $scope.saveChanges=saveChanges;
-                //  ==========
-                //  = 方法实现=
-                //  ==========
-                //获取产品线
-                orderservice.getCpsxData().success(function(data){
-                    $scope.cpsxdatas=JSON.parse(data.message).Body.ProductLine;
-                });
-                //获取产品
-                orderservice.getCpData().success(function(data){
+        $scope.ContractData=null;//合同类型对象
+        $scope.SaleType=null;//销售模式对象
+        $scope.SaleTypeModel=null;//应用类型
+        $scope.tableParams=null;//表格对象
+        $scope.ProductLineData= null;
+        $scope.ProductData=null;
+        $scope.ProductModelData=[];
+        $scope.daty=GetDate();
+        $scope.isEditing={
+            isEditing:false,
+        }
+        $scope.isTableAddShow={
+            isShow:true
+        }
+        $scope.isDetailShow={
+            isShow:false
+        }
+        $scope.isSubmit={
+            isShow:false
+        }
 
-                    $scope.propductdatas=JSON.parse(data.message).Body.Product;
-                });
-                //获取基础数据中的产品线
-                orderservice.getOptions("037").success(function (data) {
-                    //var datastr1 = JSON.parse(data.message);
-                    var datajson = JSON.parse(data.message);
-                    $scope.baseProductdata=datajson.Body.DictionaryOption;
-                });
-                //获取基础数据中的销售类型
-                orderservice.getOptions("003").success(function (data) {
-                    //var datastr1 = JSON.parse(data.message);
-                    $scope.saleTypeData=JSON.parse(data.message).Body.DictionaryOption
-                });
-                //获取基础数据中的应用类型
-                orderservice.getOptions("048").success(function (data) {
-                    //var datastr1 = JSON.parse(datastr);
-                    var datajson = JSON.parse(data.message).Body.DictionaryOption;
-                    $scope.saleModelTypeData=JSON.parse(data.message).Body.DictionaryOption;
-                });
-                //获取产品模块
-                function getCpModule(productName){
-                    var product= _.find($scope.propductdatas,function(r){
-                        return r.ProductName==productName;
-                    });
-                    //加载产品模块
-                    orderservice.getProductModule(product.ProductID).success(function(data){
-                        if(JSON.parse(data.message).Body.ProductModule!=null)
-                        {
-                            if(JSON.parse(data.message).Body.ProductModule.length==undefined)
-                            {
-                                $scope.moduledata.push(JSON.parse(data.message).Body.ProductModule);
-                            }
-                            else{
-                                $scope.moduledata=JSON.parse(data.message).Body.ProductModule;
-                            }
+        /************计算项目 ************/
+        $scope.RelCoustMoney=0.0;//成交价
+        $scope.RelQuoteMoney=0.0;//折扣
+        $scope.RelDiscountMoney=0.0;//总报价
 
-                        }else{
-                            $scope.moduledata=null;
-                        }
-                    });
+        /* ========== 本地操作对象 ========== */
+        var Orders=[];//订单对象
+        var OrderManager={};
+        var tempOrders=[];//临时订单数据，用于存储临撤销之前的订单数据。
+
+        /********************定义前端调用方法*******************/
+        $scope.cancel=cancel;//行取消编辑
+        $scope.tableAdd=tableAdd;//增加订单（表）
+        $scope.tableCancle=tableCancle;//增加订单
+        $scope.tableSave=tableSave;
+        $scope.getProductModel=getProductModel;
+        $scope.showOrder=showOrder;
+        /**************行事件定义***************/
+        $scope.rowSaveChange=rowSaveChange;
+            $scope.rowDel=rowDel;
+            $scope.changeDiscount=changeDiscount;
+        /******************数据获取******************/
+
+            //获取产品线数据
+        orderservice.getCpsxData().success(function(data){
+            $scope.ProductLineData=JSON.parse(data.message).Body.ProductLine;
+        });
+            orderservice.getCpData().success(function(data){
+            $scope.ProductData=JSON.parse(data.message).Body.Product;
+        });
+        //获取合同类型
+            orderservice.getOptions("037").success(function (data) {
+            $scope.ContractData=JSON.parse(data.message).Body.DictionaryOption;
+        });
+        //获取基础数据中的销售类型
+            orderservice.getOptions("003").success(function (data) {
+            $scope.SaleType=JSON.parse(data.message).Body.DictionaryOption
+        });
+        //获取基础数据中的应用类型
+            orderservice.getOptions("048").success(function (data) {
+            $scope.SaleTypeModel=JSON.parse(data.message).Body.DictionaryOption;
+        });
+        /*****************表格操作****************/
+            //获取订单数据并初始化表格
+        orderservice.getOrderData().success(function(data){
+            tempOrders=angular.copy(data);
+            Orders=angular.copy(data);
+            GetSum(data);
+            $scope.tableParams=new NgTableParams({count:5},{
+                counts:[5,10,15,20],
+                dataset:angular.copy(data)
+            });
+        });
+        /***********************方法*********************/
+        /**********************行定义事件*********************/
+        function changeDiscount(item){
+            if(item.RelCost!=0&&item.Quote!=0){
+                item.Discount=parseFloat(((item.RelCost/item.Quote)*100).toFixed(2))
+            }
+        }
+        //行删除方法
+        function rowDel(item){
+            for(var i=0;i<Orders.length;i++){
+                if(item.Id==Orders[i].Id){
+                    Orders.splice(i,1);
                 }
-                //配置表格
-                orderservice.getOrderData().success(function(data){
-                    orderDataCopy=angular.copy(data);
-                    tempData=angular.copy(data);
-                    ChangeSum();
-                    $scope.AllQuote=sum("Quote");
-                    $scope.AllCoust=sum("RelCost");
-                    $scope.AllDiscount=sum("Discount");
-                    $scope.tableParams=new NgTableParams({count:5},{
-                        counts:[5,10,15,20],
-                        dataset:orderDataCopy
-                    })
-                });
-                $scope.tableParams=new NgTableParams({count:5},{
-                    counts:[5,10,15,20],
-                    dataset:orderDataCopy
-                })
-                //取消修改
-                function cancelChanges(){
-                    $scope.isEditing = false;
-                    $scope.isAdding = false;
-                    $scope.tableParams.settings().dataset=angular.copy(tempData);
-                    $scope.tableParams.reload();
+            }
+            tempOrders=angular.copy(Orders);
+            $scope.tableParams.settings().dataset=angular.copy(Orders);
+            $scope.tableParams.reload();
+        }
+        //行编辑保存事件
+        function rowSaveChange(item,itemForm){
+            console.log(item);
+            var productlimemodel=GetProcuctLineModel(item.ProductLineName);
+            var prodoctmodel=GetProductModel(item.ProductName);
+            var prodoctmoduleModel=GetProductModuleModle(item.ProductModuleName);
+            for(var i=0; i<Orders.length;i++){
+                if(Orders[i].Id === item.Id){
+                    Orders[i].ProductLineName=productlimemodel.ProductLineName;
+                    Orders[i].ProductLineId=productlimemodel.ProductLineID;
+                    Orders[i].ProductName=prodoctmodel.ProductName;
+                    Orders[i].ProductID=prodoctmodel.ProductID;
+                    Orders[i].ProductModuleName=prodoctmoduleModel.ProductModuleName;
+                    Orders[i].ProductModuleID=prodoctmoduleModel.ProductModuleID;
+                    Orders[i].Quote=item.Quote;
+                    Orders[i].RelCost=item.RelCost;
+                    Orders[i].Discount=item.Discount;
                 }
-                //添加数据
-                function add(){
-                    $scope.isEditing = true;
-                    $scope.isAdding = true;
-                    $scope.isSubmit.isSubmit=true;
-                    var id =parseInt(window.localStorage.getItem("id"))+1;
-                    window.localStorage.setItem("id",id);
-                    $scope.isEditing = true;
-                    $scope.isAdding = true;
-                    console.log($scope.tableParams);
-                    $scope.tableParams.settings().dataset.unshift({
-                        Id:id,
-                        ProductLineName: "",
-                        ProductLineID: "",
-                        ProductName: "",
-                        ProductID: "",
-                        ProductModuleName:"",
-                        ProductModuleID:"",
-                        Quote: 0,
-                        RelCost:0,
-                        Discount:0
-                    });
-                    orderDataCopy=  $scope.tableParams.settings().dataset;
-                    $scope.tableParams.sorting({});
-                    $scope.tableParams.page(1);
-                    $scope.tableParams.reload();
+            }
+            GetSum(Orders);
+            tempOrders=angular.copy(Orders);
+            item.isEditing=false;
+            $scope.isSubmit.isShow=true;
+            $scope.tableParams.settings().dataset=angular.copy(Orders);
+            $scope.tableParams.reload();
+        }
+        //  = 表格相关方法 =
+        //表格整体增加数据*/
+        function tableAdd(){
+            var Id=Orders[0]==undefined ?0:Orders[0]+1;
+            Orders.unshift({
+                Id:Id,
+                ProductLineName:'',
+                ProductLineId:'',
+                ProductName:'',
+                ProductID:'',
+                ProductModuleName:'',
+                ProductModuleID:'',
+                Quote:0.0,
+                RelCost:0.0,
+                Discount:0.0
+            });
+            $scope.isEditing.isEditing=true;
+            $scope.isTableAddShow.isShow=false;
+            if($scope.tableParams==null){
+                $scope.tableParams=new NgTableParams({count:5},{counts:[5,10,15,20]})
+            }
+            $scope.tableParams.settings().dataset=angular.copy(Orders);
+            $scope.tableParams.reload();
+        };
+        //表格数据还原操作
+        function tableCancle(){
+            $scope.isEditing.isEditing=false;
+            $scope.isTableAddShow.isShow=true;
+            Orders=angular.copy(tempOrders);
+            $scope.tableParams.settings().dataset=angular.copy(tempOrders);
+            $scope.tableParams.reload();
+        }
+        //行还原指定行对象的数据
+        function cancel(item,itemForm){
+            item.isEditing=false;
+            $scope.tableParams.settings().dataset=angular.copy(Orders);
+            $scope.tableParams.reload();
+        }
+        //表格添加
+        function tableSave(){
+            var datas =$scope.tableParams.settings().dataset;
+            for(var i=0;i<datas.length;i++){
+                if(datas[i].ProductLineName==''){
+                    alert("请选择产品线！");
+                    return;
                 }
-                //取消操作
-                function cancel(item,itemForm){
-                    var copyData=resetItem(item,itemForm);
-                    console.log(copyData);
-                    angular.extend(iorderManagerCtrltem,copyData);
+                if(datas[i].ProductName==''){
+                    alert("请选择产品！");
+                    return;
                 }
-                //删除操作
-                function del(item){
-                    $scope.tableParams.settings().dataset=remove(item);
-                    $scope.tableParams.reload();
-                    ChangeSum();
-                }
-                function saveChanges() {
-                    $scope.isEditing=false;
-                    $scope.isAdding=false;
-                    var currentPage = $scope.tableParams.page();
-                    tempData = angular.copy($scope.tableParams.settings().dataset);
-                    orderDataCopy=tempData;
-                    ChangeSum();
-                }
-                //保存操作
-                function save(item,itemForm){
-                    var id=parseInt(window.localStorage.getItem("id"))+1;
-                    var productline = _.find($scope.cpsxdatas,function(r){
-                        return r.ProductLineName == item.ProductLineName;
-                    });
-                    var product=_.find($scope.propductdatas,function(r){
-                        return r.ProductName==item.ProductName;
-                    });
-                    var productmodule=_.find($scope.moduledata,function(r){
-                        return r.ProductModuleName==item.ProductModuleName;
-                    });
-                    for(var i=0;i<orderDataCopy.length;i++){
-                        if(orderDataCopy[i].Id==item.Id){
-                            orderDataCopy[i].ProductLineName=productline.ProductLineName;
-                            orderDataCopy[i].ProductLineID=productline.ProductLineID;
-                            orderDataCopy[i].ProductName=product.ProductName;
-                            orderDataCopy[i].ProductCode=product.ProductID;
-                            orderDataCopy[i].ProductModuleName=productmodule.ProductModuleName;
-                            orderDataCopy[i].ProductModuleID=productmodule.ProductModuleID;
-                            orderDataCopy[i].Quote=item.Quote;
-                            orderDataCopy[i].RelCost=item.RelCost;
-                            orderDataCopy[i].Discount=item.Discount;
-                        }
-                    }
-                    item.isEditing=false;
-                    ChangeSum();
-                }
-                //重置表单数据
-                function resetTableStatus(){
-                    $scope.isEditing = false;
-                    $scope.isAdding = false;
-                    $scope.tableForm.$setPristine();
-                }
-                //重置表格
-                function resetItem(item,itemForm)
+                if(datas[i].ProductModuleName=='')
                 {
-                    orderDataCopy=tempData;
-                    item.isEditing=false;
-                    itemForm.$setPristine();
-                    for(var i=0;i<tempData.length-1;i++)
-                    {
-                        if(tempData[i].Id==item.Id)
-                        {
-                            return tempData[i];
-                        }
+                    alert("请选择产品模块！");
+                    return;
+                }
+            }
+            Orders=angular.copy(datas);
+            GetSum(Orders);
+            tempOrders=angular.copy(datas);
+            $scope.isEditing.isEditing=false;
+            $scope.isTableAddShow.isShow=true;
+            $scope.isSubmit.isShow=true;
+        }
+
+        //产品下拉时触发加载产品模块方法
+        function getProductModel(productName){
+            var producrModel =_.find($scope.ProductData,function(r){
+                return r.ProductName==productName;
+            });
+            orderservice.getProductModule(producrModel.ProductID).success(function(data){
+                var tempdata=JSON.parse(data.message).Body.ProductModule;
+                if(tempdata!=null||tempdata!=undefined){
+                    if(tempdata.length!=undefined||tempdata.length!=null){
+                        $scope.ProductModelData=tempdata;
+                    }else{
+                        $scope.ProductModelData.push(tempdata);
                     }
-                    return null;
+                }else{
+                    $scope.ProductModelData=[];
                 }
-                //移除指定数据
-                function remove(item){
-                    for( var i=0;i<orderDataCopy.length;i++){
-                        if(item.Id==orderDataCopy[i].Id){
-                            orderDataCopy.splice(i,1);
-                        }
-                    }
-                    return orderDataCopy;
-                }
-                //展示所有的对象数据
-                function showOrder(){
-                    $scope.isShow.isShow=true;
-                    $scope.isSubmit.isSubmit=false;
-                    AllOrders={};
-                    AllOrders.Orders=tempData;
-                    AllOrders.RelContract=$scope.productLine;
-                    AllOrders.RelSaleType=$scope.saleType;
-                    AllOrders.RelSaleTypeModel=$scope.saleTypeModel;
-                    AllOrders.RelDistinct=$scope.AllDiscount;
-                    AllOrders.RelQuote=$scope.AllQuote;
-                    AllOrders.RelCoust=$scope.AllCoust;
-                    AllOrders.OrderId=parseInt(Math.random()*100000000);
-                    $scope.AllOrdersList.unshift(AllOrders);
-                    tempData=[];
-                    orderDataCopy=[];
-                    $scope.tableParams.settings().dataset=[];
-                    $scope.tableParams.reload();
-                    console.log($scope.AllOrdersList);
-                    console.log(JSON.stringify(AllOrders));
-                }
-                //展示所有的对象数据
-                //改变数据
-                function ChangeSum(){
-                    $scope.AllQuote=sum("Quote");
-                    $scope.AllCoust=sum("RelCost");
-                    $scope.AllDiscount=sum("Discount");
-                }
-                //求和
-                function sum(name){
-                    var temp=0;
-                    for(var i=0;i<orderDataCopy.length;i++){
-                        temp+=parseInt(orderDataCopy[i][name]);
-                    }
-                    return temp;
-                }
-                function GetDate(){
-                    var da=new Date();
-                    var year =da.getFullYear();
-                }
-                function findWhere(datas,data){
-                    for(var i=0;i<datas.length;i++)
-                    {
-                        if(datas[i].Id==data.Id){
-                            return datas[i];
-                        }else{
-                            return null;
-                        }
-                    }
-                }
-                function GetDate(){
-                    var da =new Date();
-                    var year =da.getFullYear();
-                    var month=da.getMonth()+1;
-                    var day=da.getDate();
-                    return year+"年"+month+"月"+day+"日";
-                }
-            }]);
+            });
+        }
+        function showOrder(){
+            console.log($scope.productLine);
+            if($scope.productLine==undefined){
+                alert("请选择合同类型！");
+                return;
+            }
+            if($scope.saleType==undefined){
+                alert("请选择应用类型！");
+                return;
+            }
+            if($scope.saleTypeModel==undefined){
+                alert("请选择销售模式！");
+                return;
+            }
+            OrderManager={};
+            OrderManager.Orders=Orders;
+            OrderManager.OrderId=parseInt(Math.random()*100000000);
+            OrderManager.ContractModel=_.find($scope.ContractData,{OptionText:$scope.productLine});
+            OrderManager.SaleTypeModel=_.find($scope.SaleType,{OptionText:$scope.saleType});;
+            OrderManager.SaleTypeModuleModel=_.find($scope.SaleTypeModel,{OptionText:$scope.saleTypeModel});;
+            OrderManager.RelCoustMoney=$scope.RelCoustMoney;
+            OrderManager.RelQuoteMoney=$scope.RelQuoteMoney;
+            OrderManager.RelDiscountMoney=$scope.RelDiscountMoney;
+            $scope.AllOrderManagerList.unshift(OrderManager);
+            console.log($scope.AllOrderManagerList);
+            $scope.isDetailShow.isShow=true;
+            $scope.isSubmit.isShow=false;
+            Orders=[];
+            tempOrders=[];
+            $scope.tableParams.settings().dataset=angular.copy(Orders);
+            $scope.tableParams.reload();
+        }
+        //  = 公共方法 =
+
+        //获取指定集合中指定的元素的总和
+        function GetSum(datas){
+            var dismoney =0.0;
+            var qmoney=0.0;
+            var comoney=0.0;
+            for(var i=0;i<datas.length;i++){
+                dismoney+=parseFloat(datas[i]['Discount']);
+                qmoney+=parseFloat(datas[i]['Quote']);
+                comoney+=parseFloat(datas[i]['RelCost']);
+            }
+            $scope.RelQuoteMoney=qmoney;
+            $scope.RelDiscountMoney=dismoney;
+            $scope.RelCoustMoney=comoney;
+        }
+        //本地集合中获取产品线对象
+        function GetProcuctLineModel(productLineName){
+            return _.find($scope.ProductLineData,function(r){
+                return r.ProductLineName==productLineName;
+            })
+        }
+        //本地获取产品对象
+        function GetProductModel(productName){
+            return _.find($scope.ProductData,function(r){
+                return r.ProductName==productName;
+            })
+        }
+        //本地获取产品模块对象
+        function GetProductModuleModle(productModuleName){
+            return _.find($scope.ProductModelData,function(r){
+                return r.ProductModuleName == productModuleName;
+            })
+        }
+        function GetDate(){
+            var da =new Date();
+            var year =da.getFullYear();
+            var month=da.getMonth()+1;
+            var day=da.getDate();
+            return year+"年"+month+"月"+day+"日";
+        }
+    }]);
 });
