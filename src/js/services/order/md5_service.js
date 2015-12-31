@@ -1,7 +1,6 @@
-﻿angular.module('MD5Service', [])
-
-.factory('MD5Service', [function () {
-
+﻿define([],function(){
+angular.module('myApp.md5_service', [])
+.factory('md5_service', [function () {
     var rotateLeft = function (lValue, iShiftBits) {
         return (lValue << iShiftBits) | (lValue >>> (32 - iShiftBits));
     }
@@ -201,3 +200,4 @@
         }
     }
 } ])
+});

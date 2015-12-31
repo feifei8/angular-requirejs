@@ -7,7 +7,8 @@ define([
     'angular-ui-router',
     'angularRoute',
     'adminLTEmodule',
-    'homeModule'
+    'homeModule',
+    'order_module'
 
 ], function(angular, angularRoute, index, index2) {
     // Declare app level module which depends on views, and components
@@ -16,7 +17,9 @@ define([
        //userdemo
         'myApp.home',
         //adminLTE
-        'myApp.adminLTE'
+        'myApp.adminLTE',
+        //order
+        'myApp.order'
     ]).
     config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/doc_start'});
