@@ -51,10 +51,9 @@ require.config({
         'adminLTEmodule':"modules/adminLTE",
         //order
         //orderModule
-        'ordermodule':'modules/order/ordermodule',
+        'ordermodule':'modules/ordermodule',
         //MD5加密文件
         'angular-md5':'../../public/lib/angular-md5/angular-md5',
-        'mainThirdPlug':'services/mainThirdPlug.js（废弃明天删）',
         //ngtable表格
         'ngtable':'../../plugins/ngtable/ngtable.v1.0.0',
         'underscore':'../../plugins/Underscore/underscore-min',
@@ -63,11 +62,10 @@ require.config({
         'publicApi':'services/publicApi/orderApi',
         //订单服务
         'orderservice':'services/order/orderservice',
-        'Order.OrderManagerService':'services/Order.OrderManagerService.js（废弃明天删）',
+        //undscoreservice
+        'underscoreservice':'services/publicTools/underscoreservice',
         //controller
-        'orderCtrl':'controllers/order/orderctrl',
-        'OrderManagerController':'controllers/Order.OrderManagerController.js（废弃明天删）',
-        'mainController':'controllers/mainController'
+        'orderCtrl':'controllers/order/orderctrl'
 
 },
     shim:{

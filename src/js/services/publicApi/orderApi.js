@@ -18,7 +18,7 @@ angular.module('myApp.PublicApi.OrderApi',[]).factory('orderapiservice',['$http'
         projectupdate:baseUrl+'project.update',
         projectDetailupdate:baseUrl+'projectDetail.update',
         flowOwnergetByStep:baseUrl+'flowOwner.getByStep',
-        orderJsonUrl:'../../dist/json/OrderData.json'
+        orderJsonUrl:'src/js/json/OrderData.json'
     }
 }]);
 });
