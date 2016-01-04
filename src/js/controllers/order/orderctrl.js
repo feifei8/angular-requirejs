@@ -138,7 +138,7 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         //  = 表格相关方法 =
         //表格整体增加数据*/
         function tableAdd(){
-            var Id=Orders[0]==undefined ?0:Orders[0]+1;
+            var Id=Orders[0]==undefined ?0:Orders[0].Id+1;
             Orders.unshift({
                 Id:Id,
                 ProductLineName:'',
@@ -192,8 +192,18 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
                 }
             }
             Orders=angular.copy(datas);
+            for(var i=0;i<Orders.length;i++){
+                if(Orders[i].ProductLineId==''){
+                    var productlimemodel=GetProcuctLineModel(Orders[i].ProductLineName);
+                    var prodoctmodel=GetProductModel(Orders[i].ProductName);
+                    var prodoctmoduleModel=GetProductModuleModle(Orders[i].ProductModuleName);
+                    Orders[i].ProductLineId=productlimemodel.ProductLineID;
+                    Orders[i].ProductID=prodoctmodel.ProductID;
+                    Orders[i].ProductModuleID=prodoctmoduleModel.ProductModuleID;
+                }
+            }
             GetSum(Orders);
-            tempOrders=angular.copy(datas);
+            tempOrders=angular.copy(Orders);
             $scope.isEditing.isEditing=false;
             $scope.isTableAddShow.isShow=true;
             $scope.isSubmit.isShow=true;
@@ -218,7 +228,6 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             });
         }
         function showOrder(){
-            console.log($scope.productLine);
             if($scope.productLine==undefined){
                 alert("请选择合同类型！");
                 return;
@@ -244,10 +253,25 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             console.log($scope.AllOrderManagerList);
             $scope.isDetailShow.isShow=true;
             $scope.isSubmit.isShow=false;
+            var content ={};
+            content.userName='lujwa';
+            content.time='2016-01-04';
+            content.contractName=OrderManager.ContractModel.OptionText;
+            content.contractCode=OrderManager.ContractModel.PK_Option;
+            content.saleTypeName=OrderManager.SaleTypeModel.OptionText;
+            content.saleTypeCode=OrderManager.SaleTypeModel.PK_Option;
+            content.saleTypeModuleName=OrderManager.SaleTypeModuleModel.OptionText;
+            content.saleTypeModuleCode=OrderManager.SaleTypeModuleModel.PK_Option;
+            content.orders=Orders;
+            content.allQuote=$scope.RelQuoteMoney;
+            content.allCost=$scope.RelCoustMoney;
+            content.allDiscount=$scope.RelDiscountMoney;
+            console.log(JSON.stringify(content));
             Orders=[];
             tempOrders=[];
             $scope.tableParams.settings().dataset=angular.copy(Orders);
             $scope.tableParams.reload();
+
         }
         //  = 公共方法 =
 
