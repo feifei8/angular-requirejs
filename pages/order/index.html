@@ -1,230 +1,244 @@
-
-	<section class="content" >
-		<div class="box box-solid box-primary">
-					<div class="box-header with-border">
-						<h3 class="box-title"><b>合同审批单</b></h3>
-					</div>
-					<!-- form start -->
-					<form role="form">
-						<div class="box-body">
-							<table class="table">
-							<tr>
-								<td>
-									<p class="text-muted">制单人：陆建伟</p>
-								</td>
-								<td>
-									<label ></label>
-
-								</td>
-								<td>
-									<p class="text-muted">制单时间：2015-12-30</p>
-								</td>
-
-							</tr>
-								<tr >
-									<td  >
-										<div class="input-group">
-											<lable>合同类型：</lable>
-											<select  class="form-control select2" style="width:100%;" ng-model="productLine" ng-options="baseProduct.OptionText as baseProduct.OptionText for baseProduct in baseProductdata">
-
-											</select>
-
-										</div>
-
-									</td>
-									<td  >
-										<div class="input-group">
-											<lable>应用类型：</lable>
-											<select  class="form-control select2" style="width: 100%;" ng-model="saleType" ng-options="saleType.OptionText as saleType.OptionText for saleType in saleTypeData"></select>
-
-											</select>
-
-										</div>
-									</td>
-
-									<td >
-										<div class="input-group">
-											<lable>销售模式：</lable>
-											<select  class="form-control select2" style="width: 100%;" ng-model="saleTypeModel" ng-options="saleTypeModel.OptionText as saleTypeModel.OptionText for saleTypeModel in saleModelTypeData"></select>
-
-											</select>
-
-										</div>
-										<!-- /input-group -->
-									</td>
-									<!-- /.col-lg-6 -->
-								</tr>
-
-								<tr>
-									<td >
-										<p class="text-red">报价：{{AllQuote}}￥</p>
-										<!-- /input-group -->
-									</td>
-									<td >
-										<p class="text-red">成交价：{{AllCoust}}￥</p>
-										<!-- /input-group -->
-									</td>
-
-									<td >
-										<p class="text-red">折扣：{{AllDiscount}}%</p>
-										<!-- /input-group -->
-									</td>
-									<!-- /.col-lg-6 -->
-								</tr>
-								<tr>
-									<td></td><td></td><td></td>
-								</tr>
-								</table>
-
-
-							<div class="row">
-								<div class="col-md-12">
-							  <div class="brn-group pull-right">
-								<button class="btn btn-default" ng-if="isEditing" ng-click="cancelChanges()">
-						          <span class="glyphicon glyphicon-remove"></span>
-						        </button>
-						
-						        </button>
-						        <button class="btn btn-primary" ng-if="isEditing" ng-disabled="itemForm.$invalid" ng-click="saveChanges()">
-						          <span class="glyphicon glyphicon-ok"></span>
-						        </button>
-						        <button class="btn btn-default" ng-click="add();">
-						          <span class="glyphicon glyphicon-plus"></span>
-						        </button>
-					      </div>
-					<table class="table table-hover editable-table table-responsive table-bordered table-condensed table-striped" 
-						ng-table="tableParams"  ng-form="tableForm" 
-						disable-filter="isAdding" tracked-table="tableTracker">
-							<colgroup>
-					          <col width="10%" />
-					          <col width="30%" />
-					          <col width="20%" />
-					          <col width="10%" />
-					          <col width="10%" />
-					          <col width="10%" />
-					          <col width="10%" />
-					        </colgroup>
-						<tr ng-repeat="item in $data" ng-form="itemForm" tracked-table-row="item">
-							<td data-title="'产品线'" sortable="'ProductLineName'" ng-switch="isEditing || item.isEditing" ng-class="ProductLineName.$dirty ? 'bg-warning' : ''" ng-form="ProductLineName" tracked-table-cell>
-								<span ng-switch-default class="editable-text" ng-bind="item.ProductLineName"></span>
-								<div class="controls" ng-class="ProductLineName.$invalid && ProductLineName.$dirty ? 'has-error' : ''" ng-switch-when="true">
-									<select name="ProductLineName" ng-model="item.ProductLineName" class="form-control" 
-									ng-options="cpx.ProductLineName as cpx.ProductLineName for cpx in cpsxdatas" ng-selected="item.ProductLineName == cpx.ProductLineName">
-									</select>
-            					</div>
-							</td>
-							<td data-title="'产品'"  sortable="'ProductName'"  ng-switch="isEditing || item.isEditing" ng-class="ProductName.$dirty ? 'bg-warning' : ''" ng-form="ProductName" tracked-table-cell>
-								<span ng-switch-default class="editable-text" ng-bind="item.ProductName"></span>
-								<div class="controls" ng-class="ProductName.$invalid && ProductName.$dirty ? 'has-error' : ''" ng-switch-when="true">
-									<select name="ProductName" ng-model="item.ProductName" class="form-control" ng-change="getCpModule(item.ProductName)" ng-options="propduct.ProductName as propduct.ProductName for propduct in propductdatas" ng-selected="item.cp==propduct.ProductName">
-										
-									</select>
-            					</div>
-							</td>
-							<td data-title="'产品模块'"  sortable="'ProductModuleName'"  ng-switch="isEditing || item.isEditing" ng-class="ProductModuleName.$dirty ? 'bg-warning' : ''" ng-form="ProductModuleName" tracked-table-cell>
-								<span ng-switch-default class="editable-text" ng-bind="item.ProductModuleName"></span>
-								<div class="controls" ng-class="ProductModuleName.$invalid && ProductModuleName.$dirty ? 'has-error' : ''" ng-switch-when="true">
-									<select name="ProductModuleName" ng-model="item.ProductModuleName" class="form-control" ng-options="propductmodule.ProductModuleName as propductmodule.ProductModuleName for propductmodule in moduledata" ng-selected="item.ProductModuleName==propductmodule.ProductmoduleName">
-									</select>
-            					</div>
-							</td>
-							<td data-title="'报价'"  sortable="'Quote'"  ng-switch="isEditing || item.isEditing" ng-class="Quote.$dirty ? 'bg-warning' : ''" ng-form="Quote" demo-tracked-table-cell>
-								<span ng-switch-default class="editable-text" ng-bind="item.Quote"></span>
-								<div class="controls" ng-class="Quote.$invalid && Quote.$dirty ? 'has-error' : ''" ng-switch-when="true">
-									  <input type="number" name="Quote"ng-model="item.Quote" class="editable-input form-control input-sm" required />
-            					</div>
-							</td>
-							<td data-title="'成交价'" sortable="'RelCost'"  ng-switch="isEditing || item.isEditing"  ng-class="RelCost.$dirty ? 'bg-warning' : ''" ng-form="RelCost" demo-tracked-table-cell>
-								<span ng-switch-default class="editable-text" ng-bind="item.RelCost"></span>
-								<div class="controls" ng-class="RelCost.$invalid && RelCost.$dirty ? 'has-error' : ''" ng-switch-when="true">
-									  <input type="number" name="RelCost" ng-model="item.RelCost" class="editable-input form-control input-sm" required />
-            					</div>
-							</td>
-							<td data-title="'折扣'" sortable="'Discount'" ng-switch="isEditing || item.isEditing" ng-class="Discount.$dirty ? 'bg-warning' : ''" ng-form="Discount" demo-tracked-table-cell>
-								<span ng-switch-default class="editable-text" ng-bind="item.Discount"></span>
-								<div class="controls" ng-class="Discount.$invalid && Discount.$dirty ? 'has-error' : ''" ng-switch-when="true">
-									  <input type="number" name="Discount" ng-model="item.Discount" class="editable-input form-control input-sm" required />
-            					</div>
-							</td>
-							<td> 
-								<button class="btn btn-primary btn-sm" ng-click="save(item, itemForm)" ng-if="item.isEditing" ng-disabled="itemForm.$pristine || itemForm.$invalid">
-									<span class="glyphicon glyphicon-ok"></span>
-								</button>
-            					<button class="btn btn-default btn-sm" ng-click="cancel(item, itemForm)" ng-if="item.isEditing">
-            						<span class="glyphicon glyphicon-remove"></span>
-            					</button>
-								<button class="btn btn-default btn-sm" ng-click="item.isEditing = true" ng-if="!item.isEditing">
-									<span class="glyphicon glyphicon-pencil"></span>
-								</button>
-								  <button class="btn btn-danger btn-sm" ng-click="del(item)" ng-if="!item.isEditing">
-								  	<span class="glyphicon glyphicon-trash"></span>
-								  </button>
-							</td>
-						</tr>
-					</table>
-					</div>
-							</div>
-							<div class="form-group">
-								<!--<label for="exampleInputFile">附件</label>-->
-								<!--<input type="file" id="exampleInputFile">-->
-
-							</div>
-
-						</div>
-						<!-- /.box-body -->
-
-						<div class="box-footer">
-							<button type="submit" class="btn btn-primary" ng-click="showOrder()" ng-if="isSubmit.isSubmit" >提交</button>
-						</div>
-					</form>
-					</div>
-        <div class="box box-solid box-warning" >
-            <div class="box-header with-border">
-                <h3 class="box-title"><b>我的订单</b></h3>
-            </div>
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>合同审批单</title>
+</head>
+<body>
+<section class="content" ng-controller="orderCtrl">
+    <!-- general form elements -->
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title"><b>合同审批单</b></h3>
+        </div>
+        <!-- form start -->
+        <form role="form">
             <div class="box-body">
-                <div class="row" ng-repeat="OrderInfo in AllOrdersList" {{AllOrdersList}}>
+                <table class="table">
+                    <tr>
+                        <td>
+                            <p class="text-muted">制单人：陆建伟</p>
+                        </td>
+                        <td>
+                            <label for="exampleInputPassword1"></label>
+
+                        </td>
+                        <td>
+                            <p class="text-muted">制单时间：2015-12-30</p>
+
+                        </td>
+
+                    </tr>
+                    <tr >
+                        <td  >
+                            <div class="form-group">
+                                <lable>合同类型：</lable>
+                                <select  class="form-control select2" style="width:100%;" ng-model="productLine" ng-options="contract.OptionText as contract.OptionText for contract in ContractData">
+
+                                </select>
+
+                            </div>
+
+                        </td>
+                        <td  >
+                            <div class="form-group">
+                                <lable>应用类型：</lable>
+                                <select  class="form-control select2" style="width: 100%;" ng-model="saleType" ng-options="saleType.OptionText as saleType.OptionText for saleType in SaleType"></select>
+
+                                </select>
+
+                            </div>
+                        </td>
+
+                        <td >
+                            <div class="form-group">
+                                <lable>销售模式：</lable>
+                                <select  class="form-control select2" style="width: 100%;" ng-model="saleTypeModel" ng-options="saleTypeModel.OptionText as saleTypeModel.OptionText for saleTypeModel in SaleTypeModel"></select>
+
+                                </select>
+
+                            </div>
+                            <!-- /input-group -->
+                        </td>
+                        <!-- /.col-lg-6 -->
+                    </tr>
+
+                    <tr>
+                        <td >
+                            <p class="text-red">报价：{{RelQuoteMoney}}￥</p>
+                            <!-- /input-group -->
+                        </td>
+                        <td >
+                            <p class="text-red">成交价：{{RelCoustMoney}}￥</p>
+                            <!-- /input-group -->
+                        </td>
+
+                        <td >
+                            <p class="text-red">折扣：{{RelDiscountMoney}}%</p>
+                            <!-- /input-group -->
+                        </td>
+                        <!-- /.col-lg-6 -->
+                    </tr>
+                    <tr>
+                        <td></td><td></td><td></td>
+                    </tr>
+                </table>
+
+
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h4>订单详情</h4>
+                    </div>
                     <div class="col-md-12">
-                        <lale ng-bind="daty"></lale>
-                        <table class="table table-responsive table-bordered " style="margin-top: 30px;font-size:12px;" >
-								<tr>
-									<th>订单编号</th>
-									<th>合同类型</th>
-									<th>应用类型</th>
-									<th>销售类型</th>
-									<th>产品线</th>
-									<th>产品</th>
-									<th>产品模块</th>
-									<th>报价</th>
-									<th>成交价</th>
-									<th>折扣</th>
-								</tr>
-								<tr>
-									<td  rowspan="{{OrderInfo.Orders.length+2}}" ng-bind="OrderInfo.OrderId"></td>
-									<td  rowspan="{{OrderInfo.Orders.length+1}}" ng-bind="OrderInfo.RelContract"></td>
-									<td  rowspan="{{OrderInfo.Orders.length+1}}" ng-bind="OrderInfo.RelSaleType"></td>
-									<td  rowspan="{{OrderInfo.Orders.length+1}}" ng-bind="OrderInfo.RelSaleTypeModel"></td>
-								</tr>
-								<tr ng-repeat="items in OrderInfo.Orders">
-									<td ng-bind="items.ProductLineName"></td>
-									<td ng-bind="items.ProductName"></td>
-									<td ng-bind="items.ProductModuleName"></td>
-									<td ng-bind="items.Quote"></td>
-									<td ng-bind="items.RelCost"></td>
-									<td ng-bind="items.Discount"></td>
-								</tr>
-								<tr>
-									<td colspan="6" class="text-right">合计</td>
-									<td ng-bind="OrderInfo.RelQuote"></td>
-									<td ng-bind="OrderInfo.RelCoust"></td>
-									<td ng-bind="OrderInfo.RelDistinct"></td>
-								</tr>
-							</table>
+                        <div class="brn-group pull-right">
+                            <button class="btn btn-default" ng-if="isEditing.isEditing" ng-click="tableCancle()">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+
+                            </button>
+                            <button class="btn btn-primary" ng-if="isEditing.isEditing" ng-disabled="itemForm.$invalid" ng-click="tableSave()">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                            <button class="btn btn-default" ng-if="isTableAddShow.isShow" ng-click="tableAdd();">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </div>
+                        <table class="table table-hover editable-table table-responsive table-bordered table-condensed table-striped"
+                               ng-table="tableParams"  ng-form="tableForm"
+                               tracked-table="tableTracker">
+                            <colgroup>
+                                <col width="15%" />
+                                <col width="25%" />
+                                <col width="20%" />
+                                <col width="10%" />
+                                <col width="10%" />
+                                <col width="10%" />
+                                <col width="10%" />
+                            </colgroup>
+                            <tr ng-repeat="item in $data" ng-form="itemForm" tracked-table-row="item">
+                                <td data-title="'产品线'" sortable="'ProductLineName'" ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="ProductLineName.$dirty ? 'bg-warning' : ''" ng-form="ProductLineName"
+                                    tracked-table-cell>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.ProductLineName"></span>
+                                    <div class="controls" ng-class="ProductLineName.$invalid && ProductLineName.$dirty ? 'has-error' : ''" ng-switch-when="true">
+                                        <select name="ProductLineName" ng-model="item.ProductLineName" class="form-control"
+                                                ng-options="cpx.ProductLineName as cpx.ProductLineName for cpx in ProductLineData" ng-selected="item.ProductLineName == cpx.ProductLineName">
+                                        </select>
+                                    </div>
+                                </td>
+                                <td data-title="'产品'"  sortable="'ProductName'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="ProductName.$dirty ? 'bg-warning' : ''" ng-form="ProductName" tracked-table-cell>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.ProductName"></span>
+                                    <div class="controls" ng-class="ProductName.$invalid && ProductName.$dirty ? 'has-error' : ''" ng-switch-when="true">
+                                        <select name="ProductName" ng-model="item.ProductName" class="form-control"
+                                                ng-change="getProductModel(item.ProductName)" ng-options="propduct.ProductName as propduct.ProductName for propduct in ProductData"
+                                                ng-selected="item.ProductName==propduct.ProductName">
+                                        </select>
+                                    </div>
+                                </td>
+                                <td data-title="'产品模块'"  sortable="'ProductModuleName'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="ProductModuleName.$dirty ? 'bg-warning' : ''" ng-form="ProductModuleName"
+                                    tracked-table-cell>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.ProductModuleName"></span>
+                                    <div class="controls" ng-class="ProductModuleName.$invalid && ProductModuleName.$dirty ? 'has-error' : ''" ng-switch-when="true">
+                                        <select name="ProductModuleName" ng-model="item.ProductModuleName" class="form-control" ng-options="propductmodule.ProductModuleName as propductmodule.ProductModuleName for propductmodule in ProductModelData"
+                                                ng-selected="item.ProductModuleName==propductmodule.ProductmoduleName">
+                                        </select>
+                                    </div>
+                                </td>
+                                <td data-title="'报价'"  sortable="'Quote'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="Quote.$dirty ? 'bg-warning' : ''" ng-form="Quote" tracked-table-cell>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.Quote"></span>
+                                    <div class="controls" ng-class="Quote.$invalid && Quote.$dirty ? 'has-error' : ''" ng-switch-when="true">
+                                        <input type="number" name="Quote"ng-model="item.Quote" ng-change="changeDiscount(item)"  class="editable-input form-control input-sm" required />
+                                    </div>
+                                </td>
+                                <td data-title="'成交价'" sortable="'RelCost'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)"  ng-class="RelCost.$dirty ? 'bg-warning' : ''" ng-form="RelCost" tracked-table-cell>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.RelCost"></span>
+                                    <div class="controls" ng-class="RelCost.$invalid && RelCost.$dirty ? 'has-error' : ''" ng-switch-when="true">
+                                        <input type="number" name="RelCost" ng-model="item.RelCost" ng-change="changeDiscount(item)"  class="editable-input form-control input-sm" required />
+                                    </div>
+                                </td>
+                                <td data-title="'折扣'" sortable="'Discount'" ng-switch="false" ng-class="Discount.$dirty ? 'bg-warning' : ''" ng-form="Discount" tracked-table-cell>
+                                    <span ng-switch-default class="editable-text"  ng-model="item.Discount"  ng-bind="item.Discount"></span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" ng-click="rowSaveChange(item, itemForm)" ng-if="item.isEditing" ng-disabled="itemForm.$pristine || itemForm.$invalid">
+                                        <span class="glyphicon glyphicon-ok"></span>
+                                    </button>
+                                    <button class="btn btn-default btn-sm" ng-click="cancel(item, itemForm)" ng-if="item.isEditing">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                    <button class="btn btn-default btn-sm" ng-click="item.isEditing = true" ng-if="!item.isEditing">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" ng-click="rowDel(item)" ng-if="!item.isEditing">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-            </div>
-            <div class="box-footer">
+                <div class="form-group">
+                    <label for="exampleInputFile">附件</label>
+                    <input type="file" id="exampleInputFile">
+
+                </div>
 
             </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary" ng-show="isSubmit.isShow" ng-click="showOrder()" >提交</button>
+            </div>
+        </form>
+        <div class="box  box-primary" ng-show="isDetailShow.isShow" style="overflow-y: auto;max-height: 500px">
+            <div class="box-header with-border">
+                <h3 class="box-title"><b>产品订单</b></h3>
+            </div>
+            <div class=" col-md-10 col-md-offset-1 box-body" ng-repeat="OrderInfo in AllOrderManagerList">
+                <div class="col-md-12">
+                    <span ng-bind="daty"></span>
+                </div>
+                <table class="table table-responsive table-bordered  " style="margin-top: 30px;" >
+                    <tr>
+                        <th>订单编号</th>
+                        <th>合同类型</th>
+                        <th>应用类型</th>
+                        <th>销售类型</th>
+                        <th>产品线</th>
+                        <th>产品</th>
+                        <th>产品模块</th>
+                        <th>报价</th>
+                        <th>成交价</th>
+                        <th>折扣</th>
+                    </tr>
+                    <tr>
+                        <td  rowspan="{{OrderInfo.Orders.length+2}}" ng-bind="OrderInfo.OrderId"></td>
+                        <td  rowspan="{{OrderInfo.Orders.length+1}}" ng-bind="OrderInfo.ContractModel.OptionText"></td>
+                        <td  rowspan="{{OrderInfo.Orders.length+1}}" ng-bind="OrderInfo.SaleTypeModel.OptionText"></td>
+                        <td  rowspan="{{OrderInfo.Orders.length+1}}" ng-bind="OrderInfo.SaleTypeModuleModel.OptionText"></td>
+                    </tr>
+                    <tr ng-repeat="items in OrderInfo.Orders">
+                        <td ng-bind="items.ProductLineName"></td>
+                        <td ng-bind="items.ProductName"></td>
+                        <td ng-bind="items.ProductModuleName"></td>
+                        <td ng-bind="items.Quote"></td>
+                        <td ng-bind="items.RelCost"></td>
+                        <td ng-bind="items.Discount"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-right">合计</td>
+                        <td ng-bind="OrderInfo.RelQuoteMoney"></td>
+                        <td ng-bind="OrderInfo.RelCoustMoney"></td>
+                        <td ng-bind="OrderInfo.RelDiscountMoney"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
-	</section>
+    </div>
+    <!-- /.box -->
+
+
+</section>
+
+</body>
+</html>

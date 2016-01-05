@@ -7,15 +7,12 @@ define([
     'angular-ui-router',
     'angularRoute',
     'adminLTEmodule',
-    'homeModule',
-    'order_module'
-
+    'ordermodule'
 ], function(angular, angularRoute, index, index2) {
     // Declare app level module which depends on views, and components
     return angular.module('myApp', [
         'ngRoute',
        //userdemo
-        'myApp.home',
         //adminLTE
         'myApp.adminLTE',
         //order

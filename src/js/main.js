@@ -52,10 +52,11 @@ require.config({
         //order
         'ngtable':'../../plugins/ngtable/ngtable.v1.0.0',
         'underscore':'../../plugins/Underscore/underscore-min',
-        'order_service':'services/order/order_service',
-        'md5_service':'services/order/md5_service',
-        'order_controller':'controllers/Order/order_controller',
-        'order_module':'modules/order_module'
+        'orderservice':'services/order/orderservice',
+        'angular-md5':'../../public/lib/angular-md5/angular-md5',
+        'orderCtrl':'controllers/Order/orderCtrl',
+        'ordermodule':'modules/ordermodule',
+        'publicApi':'services/publicapi/orderapi'
 },
     shim:{
         //引入没有使用requirejs模块写法的类库。例如underscore这个类库，本来会有一个全局变量'_'。这里shim等于快速定义一个模块，
