@@ -40,6 +40,14 @@ define([
                 },
                 getOptions: function (pk) {
                     return $http.get(orderapiservice.dictionarygetOption + '?resultType=json&PK_Dictionary='+pk+'&oauth=' + oauth + '&appKey=' + appkey + '&timestamp=' + time);
+                },
+                getClientByManager:function(managerid){
+                    return $http.get(orderapiservice.clientgetByManager+ '?resultType=json&ManagerID='+managerid+
+                            '&ClientID=""&oauth=' + oauth + '&appKey=' + appkey + '&timestamp=' + time);
+                },
+                getProjectByManager:function(Managerid){
+                    return $http.get(orderapiservice.projectgetByManager+'?resultType=json&ManagerID='+managerid
+                        +'&oauth=' + oauth + '&appKey=' + appkey + '&timestamp=' + time);
                 }
             }
         }]);

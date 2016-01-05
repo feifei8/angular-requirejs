@@ -3,14 +3,13 @@
  */
 define([
     'angular',
-    'ngtable',
-    'orderservice',
     'underscore',
-    'underscoreservice'
-],function(angular){
-angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable','UnderscoreService'])
-    .controller('orderCtrl',['orderservice','$scope','NgTableParams','_',
-        function(orderservice,$scope,NgTableParams,_){
+    'ngtable',
+    'orderservice'
+],function(angular,_){
+angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable'])
+    .controller('orderCtrl',['orderservice','$scope','NgTableParams',
+        function(orderservice,$scope,NgTableParams){
         /************非计算项目 ************/
             //  ==========
             //  = 对象 =

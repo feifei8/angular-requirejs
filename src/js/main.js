@@ -59,7 +59,7 @@ require.config({
         'underscore':'../../plugins/Underscore/underscore-min',
         //service
         //订单api服务
-        'publicApi':'services/publicApi/orderApi',
+        'publicApi':'services/publicapi/orderapi',
         //订单服务
         'orderservice':'services/order/orderservice',
         //undscoreservice
