@@ -15,15 +15,16 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             //  = 对象 =
             //  ==========
         $scope.AllOrderManagerList=[];//整体对象
-
         $scope.ContractData=null;//合同类型对象
         $scope.SaleType=null;//销售模式对象
         $scope.SaleTypeModel=null;//应用类型
         $scope.tableParams=null;//表格对象
-        $scope.ProductLineData= null;
-        $scope.ProductData=null;
-        $scope.ProductModelData=[];
-        $scope.daty=GetDate();
+        $scope.ProductLineData= null;//产品线数据对象
+        $scope.ProductData=null;//产品数据
+        $scope.ProductModelData=[];//产品模块
+            $scope.ManagerInfo=null;
+            $scope.Project=null;
+        $scope.daty=GetDate(1);
         $scope.isEditing={
             isEditing:false,
         }
@@ -36,16 +37,15 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         $scope.isSubmit={
             isShow:false
         }
-
         /************计算项目 ************/
         $scope.RelCoustMoney=0.0;//成交价
         $scope.RelQuoteMoney=0.0;//折扣
         $scope.RelDiscountMoney=0.0;//总报价
-
         /* ========== 本地操作对象 ========== */
         var Orders=[];//订单对象
         var OrderManager={};
         var tempOrders=[];//临时订单数据，用于存储临撤销之前的订单数据。
+        var ClientId='HQ20120316000083'//暂定以后采用登录人获取方式
 
         /********************定义前端调用方法*******************/
         $scope.cancel=cancel;//行取消编辑
@@ -59,7 +59,25 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             $scope.rowDel=rowDel;
             $scope.changeDiscount=changeDiscount;
         /******************数据获取******************/
-
+        console.log(GetDate(2));
+        //获取当前登录人员信息
+        orderservice.getManagerInfoBySpid('lujwa').success(function(data){
+            $scope.ManagerInfo=JSON.parse(data.message).Body.Employee;
+          console.log(  $scope.ManagerInfo.Email.substring(0,$scope.ManagerInfo.Email.indexOf('@')));
+            console.log(JSON.parse(data.message).Body.Employee);
+            //获取当前人员负责的客户列表
+            orderservice.getClientByManager($scope.ManagerInfo.PSNCode).success(function(data){
+                if(JSON.parse(data.message).Client==null){
+                    //创建新的项目
+                    orderservice.getProject($scope.ManagerInfo.PK_Corp,'').success(function(data){
+                        $scope.Project=JSON.parse(data.message).Body.Project;
+                        console.log(JSON.parse(data.message).Body.Project);
+                    });
+                }else {
+                    //绑定数据
+                }
+            });
+        });
             //获取产品线数据
         orderservice.getCpsxData().success(function(data){
             $scope.ProductLineData=JSON.parse(data.message).Body.ProductLine;
@@ -93,8 +111,12 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         /***********************方法*********************/
         /**********************行定义事件*********************/
         function changeDiscount(item){
-            if(item.RelCost!=0&&item.Quote!=0){
-                item.Discount=parseFloat(((item.RelCost/item.Quote)*100).toFixed(2))
+            if(item.StandardMoney!=0&&item.AcutalMoney!=0){
+                if(item.StandardMoney==item.AcutalMoney){
+                    item.Discount=0.00;
+                }else{
+                    item.Discount=parseFloat(((item.AcutalMoney/item.StandardMoney)*100).toFixed(2))
+                }
             }
         }
         //行删除方法
@@ -110,7 +132,6 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         }
         //行编辑保存事件
         function rowSaveChange(item,itemForm){
-            console.log(item);
             var productlimemodel=GetProcuctLineModel(item.ProductLineName);
             var prodoctmodel=GetProductModel(item.ProductName);
             var prodoctmoduleModel=GetProductModuleModle(item.ProductModuleName);
@@ -122,8 +143,8 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
                     Orders[i].ProductID=prodoctmodel.ProductID;
                     Orders[i].ProductModuleName=prodoctmoduleModel.ProductModuleName;
                     Orders[i].ProductModuleID=prodoctmoduleModel.ProductModuleID;
-                    Orders[i].Quote=item.Quote;
-                    Orders[i].RelCost=item.RelCost;
+                    Orders[i].AcutalMoney=item.AcutalMoney;
+                    Orders[i].StandardMoney=item.StandardMoney;
                     Orders[i].Discount=item.Discount;
                 }
             }
@@ -146,8 +167,8 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
                 ProductID:'',
                 ProductModuleName:'',
                 ProductModuleID:'',
-                Quote:0.0,
-                RelCost:0.0,
+                StandardMoney:0.0,
+                AcutalMoney:0.0,
                 Discount:0.0
             });
             $scope.isEditing.isEditing=true;
@@ -226,6 +247,7 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
                 }
             });
         }
+            //展示数据
         function showOrder(){
             if($scope.productLine==undefined){
                 alert("请选择合同类型！");
@@ -239,12 +261,15 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
                 alert("请选择销售模式！");
                 return;
             }
+            var ContractModel=_.find($scope.ContractData,{OptionText:$scope.productLine});
+            var SaleTypeModel=_.find($scope.SaleType,{OptionText:$scope.saleType});
+            var SaleTypeModuleModel=_.find($scope.SaleTypeModel,{OptionText:$scope.saleTypeModel});
             OrderManager={};
             OrderManager.Orders=Orders;
             OrderManager.OrderId=parseInt(Math.random()*100000000);
             OrderManager.ContractModel=_.find($scope.ContractData,{OptionText:$scope.productLine});
-            OrderManager.SaleTypeModel=_.find($scope.SaleType,{OptionText:$scope.saleType});;
-            OrderManager.SaleTypeModuleModel=_.find($scope.SaleTypeModel,{OptionText:$scope.saleTypeModel});;
+            OrderManager.SaleTypeModel=_.find($scope.SaleType,{OptionText:$scope.saleType});
+            OrderManager.SaleTypeModuleModel=_.find($scope.SaleTypeModel,{OptionText:$scope.saleTypeModel});
             OrderManager.RelCoustMoney=$scope.RelCoustMoney;
             OrderManager.RelQuoteMoney=$scope.RelQuoteMoney;
             OrderManager.RelDiscountMoney=$scope.RelDiscountMoney;
@@ -253,18 +278,32 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             $scope.isDetailShow.isShow=true;
             $scope.isSubmit.isShow=false;
             var content ={};
-            content.userName='lujwa';
-            content.time='2016-01-04';
-            content.contractName=OrderManager.ContractModel.OptionText;
-            content.contractCode=OrderManager.ContractModel.PK_Option;
-            content.saleTypeName=OrderManager.SaleTypeModel.OptionText;
-            content.saleTypeCode=OrderManager.SaleTypeModel.PK_Option;
-            content.saleTypeModuleName=OrderManager.SaleTypeModuleModel.OptionText;
-            content.saleTypeModuleCode=OrderManager.SaleTypeModuleModel.PK_Option;
-            content.orders=Orders;
-            content.allQuote=$scope.RelQuoteMoney;
-            content.allCost=$scope.RelCoustMoney;
-            content.allDiscount=$scope.RelDiscountMoney;
+            content.PK_Project=$scope.Project.PK_Project;
+            content.ProjectCode=$scope.Project.ProjectCode;
+            content.ClientID=ClientId;
+            content.StandardMoney=$scope.RelQuoteMoney;
+            content.AcutalMoney=$scope.RelCoustMoney;
+            content.Discount=$scope.RelDiscountMoney;
+            content.ManagerID=$scope.ManagerInfo.Email.substring(0,$scope.ManagerInfo.Email.indexOf('@'));
+            content.ManagerName=$scope.ManagerInfo.PSNname;
+            content.PK_Dept=$scope.ManagerInfo.PK_Dept;
+            content.DeptName=$scope.ManagerInfo.DeptName;
+            content.PK_Corp=$scope.ManagerInfo.PK_Corp;
+            content.CorpName=$scope.ManagerInfo.CorpName;
+            content.BusinessLine=SaleTypeModel.PK_Option;
+            content.BusinessLineText=SaleTypeModel.OptionText;
+            content.ProductLine=ContractModel.PK_Option;
+            content.ProductLineText=ContractModel.OptionText;
+            content.SaleMode=SaleTypeModuleModel.PK_Option;
+            content.SaleModeText=SaleTypeModuleModel.OptionText;
+            content.CreatorID=$scope.ManagerInfo.Email.substring(0,$scope.ManagerInfo.Email.indexOf('@'));
+            content.CreatorName=$scope.ManagerInfo.PSNname;
+            content.Requirement='';
+            content.Remark='';
+            content.Orders=Orders;
+            orderservice.projetUpdate(content).success(function(data){
+              console.log(data);
+            });
             console.log(JSON.stringify(content));
             Orders=[];
             tempOrders=[];
@@ -281,8 +320,8 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             var comoney=0.0;
             for(var i=0;i<datas.length;i++){
                 dismoney+=parseFloat(datas[i]['Discount']);
-                qmoney+=parseFloat(datas[i]['Quote']);
-                comoney+=parseFloat(datas[i]['RelCost']);
+                qmoney+=parseFloat(datas[i]['StandardMoney']);
+                comoney+=parseFloat(datas[i]['AcutalMoney']);
             }
             $scope.RelQuoteMoney=qmoney;
             $scope.RelDiscountMoney=dismoney;
@@ -306,12 +345,17 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
                 return r.ProductModuleName == productModuleName;
             })
         }
-        function GetDate(){
+        function GetDate(type){
             var da =new Date();
             var year =da.getFullYear();
             var month=da.getMonth()+1;
             var day=da.getDate();
-            return year+"年"+month+"月"+day+"日";
+            if(type==1){
+                return year+"年"+month+"月"+day+"日";
+            }else {
+                return year+'/'+month+'/'+day+' '+da.getHours()+':'+da.getMinutes()+':'+da.getSeconds();
+            }
+
         }
     }]);
 });

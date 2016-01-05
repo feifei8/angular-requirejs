@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html >
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>合同审批单</title>
-</head>
-<body>
 <section class="content" ng-controller="orderCtrl">
     <!-- general form elements -->
     <div class="box box-primary">
@@ -18,14 +10,14 @@
                 <table class="table">
                     <tr>
                         <td>
-                            <p class="text-muted">制单人：陆建伟</p>
+                            <p class="text-muted">制单人：<span ng-bind="ManagerInfo.PSNname"></span></p>
                         </td>
                         <td>
                             <label for="exampleInputPassword1"></label>
 
                         </td>
                         <td>
-                            <p class="text-muted">制单时间：2015-12-30</p>
+                            <p class="text-muted">制单时间：<span ng-bind="daty"></span></p>
 
                         </td>
 
@@ -144,16 +136,16 @@
                                         </select>
                                     </div>
                                 </td>
-                                <td data-title="'报价'"  sortable="'Quote'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="Quote.$dirty ? 'bg-warning' : ''" ng-form="Quote" tracked-table-cell>
-                                    <span ng-switch-default class="editable-text" ng-bind="item.Quote"></span>
-                                    <div class="controls" ng-class="Quote.$invalid && Quote.$dirty ? 'has-error' : ''" ng-switch-when="true">
-                                        <input type="number" name="Quote"ng-model="item.Quote" ng-change="changeDiscount(item)"  class="editable-input form-control input-sm" required />
+                                <td data-title="'报价'"  sortable="'StandardMoney'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="StandardMoney.$dirty ? 'bg-warning' : ''" ng-form="StandardMoney" tracked-table-cell>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.StandardMoney"></span>
+                                    <div class="controls" ng-class="StandardMoney.$invalid && StandardMoney.$dirty ? 'has-error' : ''" ng-switch-when="true">
+                                        <input type="number" name="StandardMoney"ng-model="item.StandardMoney" ng-change="changeDiscount(item)"  class="editable-input form-control input-sm" required />
                                     </div>
                                 </td>
-                                <td data-title="'成交价'" sortable="'RelCost'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)"  ng-class="RelCost.$dirty ? 'bg-warning' : ''" ng-form="RelCost" tracked-table-cell>
-                                    <span ng-switch-default class="editable-text" ng-bind="item.RelCost"></span>
-                                    <div class="controls" ng-class="RelCost.$invalid && RelCost.$dirty ? 'has-error' : ''" ng-switch-when="true">
-                                        <input type="number" name="RelCost" ng-model="item.RelCost" ng-change="changeDiscount(item)"  class="editable-input form-control input-sm" required />
+                                <td data-title="'成交价'" sortable="'AcutalMoney'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)"  ng-class="AcutalMoney.$dirty ? 'bg-warning' : ''" ng-form="AcutalMoney" tracked-table-cell>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.AcutalMoney"></span>
+                                    <div class="controls" ng-class="AcutalMoney.$invalid && AcutalMoney.$dirty ? 'has-error' : ''" ng-switch-when="true">
+                                        <input type="number" name="AcutalMoney" ng-model="item.AcutalMoney" ng-change="changeDiscount(item)"  class="editable-input form-control input-sm" required />
                                     </div>
                                 </td>
                                 <td data-title="'折扣'" sortable="'Discount'" ng-switch="false" ng-class="Discount.$dirty ? 'bg-warning' : ''" ng-form="Discount" tracked-table-cell>
@@ -221,8 +213,8 @@
                         <td ng-bind="items.ProductLineName"></td>
                         <td ng-bind="items.ProductName"></td>
                         <td ng-bind="items.ProductModuleName"></td>
-                        <td ng-bind="items.Quote"></td>
-                        <td ng-bind="items.RelCost"></td>
+                        <td ng-bind="items.StandardMoney"></td>
+                        <td ng-bind="items.AcutalMoney"></td>
                         <td ng-bind="items.Discount"></td>
                     </tr>
                     <tr>
@@ -240,5 +232,3 @@
 
 </section>
 
-</body>
-</html>
