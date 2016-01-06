@@ -5,7 +5,7 @@ define([
     'angular',
     'underscore',
     'ngtable',
-    'orderservice'
+    'orderservice',
 ],function(angular,_){
 angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable'])
     .controller('orderCtrl',['orderservice','$scope','NgTableParams',
@@ -46,6 +46,7 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         $scope.RelCoustMoney=0.0;//成交价
         $scope.RelQuoteMoney=0.0;//折扣
         $scope.RelDiscountMoney=0.0;//总报价
+            $scope.ProjectName=null;
         /* ========== 本地操作对象 ========== */
         var Orders=[];//订单对象
         var OrderManager={};
@@ -65,23 +66,22 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             $scope.rowDel=rowDel;
             $scope.changeDiscount=changeDiscount;
         /******************数据获取******************/
+
+
         //获取当前登录人员信息
         orderservice.getManagerInfoBySpid('zhanglja').success(function(data){
             $scope.ManagerInfo=JSON.parse(data.message).Body.Employee;
+            /*orderservice.getProjectByManager($scope.ManagerInfo.PSNCode,'','','','','',0,0,'').success(function(data){
+                $scope.ProjectInfo=JSON.parse(data.message).Body.Project;
+            })*/
             //获取当前人员负责的客户列表
             orderservice.getClientByManager($scope.ManagerInfo.PSNCode).success(function(data){
-                if(JSON.parse(data.message).Body.Client == undefined||JSON.parse(data.message).Body.Client==null){
-                    //创建新的项目
-                    orderservice.getProject($scope.ManagerInfo.PK_Corp,'').success(function(data){
-                        $scope.Project=JSON.parse(data.message).Body.Project;
-                    });
-                }else {
-                    $scope.ClientInfo=JSON.parse(data.message).Body.Client;
-                }
+                $scope.ClientInfo=JSON.parse(data.message).Body.Client;
+                console.log(JSON.parse(data.message).Body.Client);
             });
-            orderservice.getProjectByManager($scope.ManagerInfo.PSNCode,'','','','','',0,0,'').success(function(data){
+            orderservice.getProject($scope.ManagerInfo.PK_Corp,'').success(function(data){
                 $scope.ProjectInfo=JSON.parse(data.message).Body.Project;
-            })
+            });
         });
             //获取产品线数据
         orderservice.getCpsxData().success(function(data){
@@ -116,13 +116,13 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         /***********************方法*********************/
         /**********************行定义事件*********************/
         function getProjectInfo(ClienId){
-            var project =_.find($scope.ProjectInfo,function(r){
+            var clinet =_.find($scope.ClientInfo,function(r){
                 return r.ClientID == ClienId;
             })
-            if(project!=null) {
-                $scope.ProjectManagerName = project.ManagerName;
-                $scope.ManagerDep = project.DeptName;
-                $scope.ManagerCorp = project.CorpName;
+            if(clinet!=null) {
+                $scope.ProjectManagerName = clinet.ManagerName;
+                $scope.ManagerDep = clinet.DeptName;
+                $scope.ManagerCorp = clinet.CorpName;
             }else{
                 $scope.ProjectManagerName =null;
                 $scope.ManagerDep = null;
@@ -297,8 +297,10 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             $scope.isDetailShow.isShow=true;
             $scope.isSubmit.isShow=false;
             var content ={};
-            content.PK_Project=$scope.Project.PK_Project;
-            content.ProjectCode=$scope.Project.ProjectCode;
+            console.log($scope.ProjectInfo);
+            content.PK_Project=$scope.ProjectInfo.PK_Project;
+            content.ProjectCode=$scope.ProjectInfo.ProjectCode;
+            content.ProjectName=$scope.ProjectName;
             content.ClientID=ClientId;
             content.StandardMoney=$scope.RelQuoteMoney;
             content.AcutalMoney=$scope.RelCoustMoney;
@@ -320,6 +322,7 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             content.Requirement='';
             content.Remark='';
             content.Orders=Orders;
+            console.log(content);
             orderservice.projetUpdate(content).success(function(data){
               console.log(data);
             });

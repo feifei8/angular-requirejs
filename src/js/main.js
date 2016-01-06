@@ -65,8 +65,10 @@ require.config({
         //undscoreservice
         'underscoreservice':'services/publicTools/underscoreservice',
         //controller
-        'orderCtrl':'controllers/order/orderctrl'
-
+        'orderCtrl':'controllers/order/orderctrl',
+        /**************************公共服务****************************/
+        'oauthService':'services/publicapi/oauthconfig',//配置服务需要的参数
+        'publicGetData':'services/publicapi/getdatabyget'
 },
     shim:{
         //引入没有使用requirejs模块写法的类库。例如underscore这个类库，本来会有一个全局变量'_'。这里shim等于快速定义一个模块，
