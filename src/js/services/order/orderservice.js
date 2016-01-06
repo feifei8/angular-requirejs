@@ -88,7 +88,7 @@ define([
                             '&ClientID=&ClientName=&Sort=&PageIndex=0&PageSize=0&ReturnFields=&oauth=' + oauth + '&appKey=' + appkey + '&timestamp=' + time);
                 },
                 getProjectByManager:function(Managerid,ClientId,ClientName,ProjectCode,ProjectName,Sort,PageIndex,PageSize,ReturnFields){
-                    return $http.get(orderapiservice.projectgetByManager+'?resultType=json&ManagerID='+managerid+
+                    return $http.get(orderapiservice.projectgetByManager+'?resultType=json&ManagerID='+Managerid+
                        '&ClientId='+ClientId+ '&ClientName='+ClientName+ '&ProjectCode='+ProjectCode+ '&ProjectName='+ProjectName
                        + '&Sort='+Sort+ '&PageIndex='+PageIndex+'&PageSize='+PageSize+'&ReturnFields='+ReturnFields
                        +'&oauth=' + oauth + '&appKey=' + appkey + '&timestamp=' + time);

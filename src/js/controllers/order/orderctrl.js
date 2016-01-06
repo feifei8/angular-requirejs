@@ -22,8 +22,13 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         $scope.ProductLineData= null;//产品线数据对象
         $scope.ProductData=null;//产品数据
         $scope.ProductModelData=[];//产品模块
+            $scope.ClientInfo=null;//客户列表
+            $scope.ProjectInfo=null;
             $scope.ManagerInfo=null;
             $scope.Project=null;
+            $scope.ProjectManagerName=null;
+            $scope.ManagerDep=null;
+            $scope.ManagerCorp=null;
         $scope.daty=GetDate(1);
         $scope.isEditing={
             isEditing:false,
@@ -54,29 +59,29 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         $scope.tableSave=tableSave;
         $scope.getProductModel=getProductModel;
         $scope.showOrder=showOrder;
+            $scope.getProjectInfo=getProjectInfo;
         /**************行事件定义***************/
         $scope.rowSaveChange=rowSaveChange;
             $scope.rowDel=rowDel;
             $scope.changeDiscount=changeDiscount;
         /******************数据获取******************/
-        console.log(GetDate(2));
         //获取当前登录人员信息
-        orderservice.getManagerInfoBySpid('lujwa').success(function(data){
+        orderservice.getManagerInfoBySpid('zhanglja').success(function(data){
             $scope.ManagerInfo=JSON.parse(data.message).Body.Employee;
-          console.log(  $scope.ManagerInfo.Email.substring(0,$scope.ManagerInfo.Email.indexOf('@')));
-            console.log(JSON.parse(data.message).Body.Employee);
             //获取当前人员负责的客户列表
             orderservice.getClientByManager($scope.ManagerInfo.PSNCode).success(function(data){
-                if(JSON.parse(data.message).Client==null){
+                if(JSON.parse(data.message).Body.Client == undefined||JSON.parse(data.message).Body.Client==null){
                     //创建新的项目
                     orderservice.getProject($scope.ManagerInfo.PK_Corp,'').success(function(data){
                         $scope.Project=JSON.parse(data.message).Body.Project;
-                        console.log(JSON.parse(data.message).Body.Project);
                     });
                 }else {
-                    //绑定数据
+                    $scope.ClientInfo=JSON.parse(data.message).Body.Client;
                 }
             });
+            orderservice.getProjectByManager($scope.ManagerInfo.PSNCode,'','','','','',0,0,'').success(function(data){
+                $scope.ProjectInfo=JSON.parse(data.message).Body.Project;
+            })
         });
             //获取产品线数据
         orderservice.getCpsxData().success(function(data){
@@ -110,6 +115,20 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         });
         /***********************方法*********************/
         /**********************行定义事件*********************/
+        function getProjectInfo(ClienId){
+            var project =_.find($scope.ProjectInfo,function(r){
+                return r.ClientID == ClienId;
+            })
+            if(project!=null) {
+                $scope.ProjectManagerName = project.ManagerName;
+                $scope.ManagerDep = project.DeptName;
+                $scope.ManagerCorp = project.CorpName;
+            }else{
+                $scope.ProjectManagerName =null;
+                $scope.ManagerDep = null;
+                $scope.ManagerCorp = null;
+            }
+        }
         function changeDiscount(item){
             if(item.StandardMoney!=0&&item.AcutalMoney!=0){
                 if(item.StandardMoney==item.AcutalMoney){
