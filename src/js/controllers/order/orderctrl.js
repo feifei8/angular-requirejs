@@ -6,10 +6,11 @@ define([
     'underscore',
     'ngtable',
     'orderservice',
+    'publicGetData'
 ],function(angular,_){
-angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable'])
-    .controller('orderCtrl',['orderservice','$scope','NgTableParams',
-        function(orderservice,$scope,NgTableParams){
+angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable','publicApi.Itapi'])
+    .controller('orderCtrl',['orderservice','$scope','NgTableParams','Itapi',
+        function(orderservice,$scope,NgTableParams,Itapi){
         /************非计算项目 ************/
             //  ==========
             //  = 对象 =
@@ -66,7 +67,10 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             $scope.rowDel=rowDel;
             $scope.changeDiscount=changeDiscount;
         /******************数据获取******************/
-
+            var ss={json:"sdfs",orders:'1231'}
+            Itapi.getData(ss,'12','123','','Order','POST',true).success(function(data){
+                console.log(data);
+            });
 
         //获取当前登录人员信息
         orderservice.getManagerInfoBySpid('zhanglja').success(function(data){
