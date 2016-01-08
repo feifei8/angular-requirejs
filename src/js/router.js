@@ -20,7 +20,7 @@ define([
         //adminLTE
         'myApp.adminLTE',
         //Order
-        'myApp.home.order'
+        'myApp.order'
     ]).
     config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/doc_start'});

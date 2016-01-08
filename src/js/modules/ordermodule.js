@@ -7,13 +7,13 @@ define([
     'angularRoute',
     'ngStorage',
     'ngCookies',
-    'orderCtrl',
+    'orderCtrl1',
 
 ], function(angular) {
-    angular.module('myApp.home.order', ['ngRoute','myApp.Order.OrderManagerController'])
+    angular.module('myApp.order', ['ngRoute','myApp.Order.OrderManagerController'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/order', {
-                templateUrl: 'pages/order/index.html',
+                templateUrl: 'pages/order/indexs.html',
                 controller: 'orderCtrl'
                 //resolve: {
                 //    delay: function($q) {

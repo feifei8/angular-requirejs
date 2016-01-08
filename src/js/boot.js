@@ -14,4 +14,3 @@ require([
         angular.bootstrap(document, ['myApp']);
     });
 });
-

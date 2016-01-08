@@ -54,6 +54,8 @@ require.config({
         'ordermodule':'modules/ordermodule',
         //MD5加密文件
         'angular-md5':'../../public/lib/angular-md5/angular-md5',
+        'angular-ui-select':'../../public/lib/ui-select/select',
+        'angular-sanitize':'../../public/lib/angular-sanitize/angular-sanitize',
         //ngtable表格
         'ngtable':'../../plugins/ngtable/ngtable.v1.0.0',
         'underscore':'../../plugins/Underscore/underscore-min',
@@ -66,6 +68,7 @@ require.config({
         'underscoreservice':'services/publicTools/underscoreservice',
         //controller
         'orderCtrl':'controllers/order/orderctrl',
+        'orderCtrl1':'controllers/order/controller1',
         /**************************公共服务****************************/
         'publicGetData':'services/publicapi/itapiservice'
 },

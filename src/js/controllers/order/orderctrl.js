@@ -4,11 +4,13 @@
 define([
     'angular',
     'underscore',
+    'angular-sanitize',
+    'angular-ui-select',
     'ngtable',
     'orderservice',
     'publicGetData'
 ],function(angular,_){
-angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable','publicApi.Itapi'])
+angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable','publicApi.Itapi','ui.select','ngSanitize'])
     .controller('orderCtrl',['orderservice','$scope','NgTableParams','Itapi',
         function(orderservice,$scope,NgTableParams,Itapi){
         /************非计算项目 ************/
@@ -75,9 +77,6 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         //获取当前登录人员信息
         orderservice.getManagerInfoBySpid('zhanglja').success(function(data){
             $scope.ManagerInfo=JSON.parse(data.message).Body.Employee;
-            /*orderservice.getProjectByManager($scope.ManagerInfo.PSNCode,'','','','','',0,0,'').success(function(data){
-                $scope.ProjectInfo=JSON.parse(data.message).Body.Project;
-            })*/
             //获取当前人员负责的客户列表
             orderservice.getClientByManager($scope.ManagerInfo.PSNCode).success(function(data){
                 $scope.ClientInfo=JSON.parse(data.message).Body.Client;
@@ -108,15 +107,7 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         });
         /*****************表格操作****************/
             //获取订单数据并初始化表格
-        orderservice.getOrderData().success(function(data){
-            tempOrders=angular.copy(data);
-            Orders=angular.copy(data);
-            GetSum(data);
-            $scope.tableParams=new NgTableParams({count:5},{
-                counts:[5,10,15,20],
-                dataset:angular.copy(data)
-            });
-        });
+
         /***********************方法*********************/
         /**********************行定义事件*********************/
         function getProjectInfo(ClienId){
@@ -219,6 +210,7 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
         //表格添加
         function tableSave(){
             var datas =$scope.tableParams.settings().dataset;
+            console.log(datas);
             for(var i=0;i<datas.length;i++){
                 if(datas[i].ProductLineName==''){
                     alert("请选择产品线！");
