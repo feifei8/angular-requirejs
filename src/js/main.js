@@ -60,15 +60,8 @@ require.config({
         'ngtable':'../../plugins/ngtable/ngtable.v1.0.0',
         'underscore':'../../plugins/Underscore/underscore-min',
         //service
-        //订单api服务
-        'publicApi':'services/publicapi/orderapi',
-        //订单服务
-        'orderservice':'services/order/orderservice',
-        //undscoreservice
-        'underscoreservice':'services/publicTools/underscoreservice',
         //controller
-        'orderCtrl':'controllers/order/orderctrl',
-        'orderCtrl1':'controllers/order/controller1',
+        'orderCtrl':'controllers/order/controller',
         /**************************公共服务****************************/
         'publicGetData':'services/publicapi/itapiservice'
 },

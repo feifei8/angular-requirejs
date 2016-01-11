@@ -69,22 +69,31 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             $scope.rowDel=rowDel;
             $scope.changeDiscount=changeDiscount;
         /******************数据获取******************/
-            var ss={json:"sdfs",orders:'1231'}
+            //启动时检测本地日志库中存储的是否有未提交到后台的错误信息
+         /*   var ss={json:"sdfs",orders:'1231'}
             Itapi.getData(ss,'12','123','','Order','POST',true).success(function(data){
                 console.log(data);
             });
-
+         */
         //获取当前登录人员信息
         orderservice.getManagerInfoBySpid('zhanglja').success(function(data){
-            $scope.ManagerInfo=JSON.parse(data.message).Body.Employee;
-            //获取当前人员负责的客户列表
-            orderservice.getClientByManager($scope.ManagerInfo.PSNCode).success(function(data){
-                $scope.ClientInfo=JSON.parse(data.message).Body.Client;
-                console.log(JSON.parse(data.message).Body.Client);
-            });
-            orderservice.getProject($scope.ManagerInfo.PK_Corp,'').success(function(data){
-                $scope.ProjectInfo=JSON.parse(data.message).Body.Project;
-            });
+            try {
+                $scope.ManagerInfo = JSON.parse(data.message).Body.Employee;
+                //获取当前人员负责的客户列表
+                orderservice.getClientByManager($scope.ManagerInfo.PSNCode).success(function (data) {
+                    $scope.ClientInfo = JSON.parse(data.message).Body.Client;
+                });
+                orderservice.getProject($scope.ManagerInfo.PK_Corp, '').success(function (data) {
+                    $scope.ProjectInfo = JSON.parse(data.message).Body.Project;
+                });
+            }catch(e){
+                console.log(e.name+'------'+e,message+'------'+e.description);
+                $scope.ClientInfo=null;
+                $scope.ProjectInfo=null;
+                alert('获取客户列表时与服务器交互失败！');
+            }
+        }).error(function(data){
+            //记录日志
         });
             //获取产品线数据
         orderservice.getCpsxData().success(function(data){
@@ -327,7 +336,6 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             tempOrders=[];
             $scope.tableParams.settings().dataset=angular.copy(Orders);
             $scope.tableParams.reload();
-
         }
         //  = 公共方法 =
 
@@ -375,5 +383,19 @@ angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService',
             }
 
         }
+            function log(data){
+                //记录日志，成功返回true，失败返回false
+                orderservice.saveLog(data).success(function(data){
+                    if(data.message==true){
+                        return true;
+                    }else {
+                        return false;
+                    }
+                }).error(function(data){
+                    return false;
+                    //记录到本地
+                    window.localStorage.setItem('ServiceError',data);
+                })
+            }
     }]);
 });

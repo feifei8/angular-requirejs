@@ -110,9 +110,16 @@ define([
                     formData["appKey"]=appkey;
                     formData["timestamp"]=time;
                     return $http.post(orderapiservice.projectupdate,formData);
+                },
+                saveLog:function(data){
+                    var formData=new Object();
+                    formData["resultType"]="json";
+                    formData["LogData"]=JSON.stringify(data);
+                    formData["oauth"]=oauth;
+                    formData["appKey"]=appkey;
+                    formData["timestamp"]=time;
+                    //调用接口进行日志记录
                 }
             }
         }]);
-
-
 });

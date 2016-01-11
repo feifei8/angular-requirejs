@@ -10,12 +10,11 @@ define([
     'angular-sanitize',
     'angular-ui-select',
     'ngtable',
-    'orderservice',
     'publicGetData'
 ],function(angular,_){
-    angular.module('myApp.Order.OrderManagerController',['myApp.Order.OrderService','ngTable','publicApi.Itapi','ui.select','ngSanitize'])
-        .controller('orderCtrl',['orderservice','$scope','NgTableParams','Itapi',
-            function(orderservice,$scope,NgTableParams,Itapi){
+    angular.module('myApp.Order.OrderManagerController',['publicApi.Itapi','ngTable','ui.select','ngSanitize'])
+        .controller('orderCtrl',['Itapi','$scope','NgTableParams',
+            function(Itapi,$scope,NgTableParams){
                 /************非计算项目 ************/
                     //  ==========
                     //  = 对象 =
@@ -76,39 +75,48 @@ define([
                 $scope.rowDel=rowDel;
                 $scope.changeDiscount=changeDiscount;
                 /******************数据获取******************/
-                var ss={json:"sdfs",orders:'1231'}
-                Itapi.getData(ss,'12','123','','Order','POST',true).success(function(data){
-                    console.log(data);
-                });
 
                 //获取当前登录人员信息
-                orderservice.getManagerInfoBySpid('zhanglja').success(function(data){
+                try{
+                Itapi.getData({Keyword:'zhanglja'},'MDMPersonService','employee.getByKeyword','','Order','GET',false).success(function(data){
                     $scope.ManagerInfo=JSON.parse(data.message).Body.Employee;
-                    //获取当前人员负责的客户列表
-                    orderservice.getClientByManager($scope.ManagerInfo.PSNCode).success(function(data){
+                    var ManagerInfo={
+                        ManagerID:$scope.ManagerInfo.PSNCode,
+                        ClientID:'',
+                        ClientName:'',
+                        Sort:'',
+                        PageIndex:0,
+                        PageSize:0,
+                        ReturnFields:''
+                    };
+                    Itapi.getData(ManagerInfo,'PSTClientService','client.getByManager','','Order','GET',false).success(function(data){
                         $scope.ClientInfo=JSON.parse(data.message).Body.Client;
                     });
-                    orderservice.getProject($scope.ManagerInfo.PK_Corp,'').success(function(data){
+                    Itapi.getData({PK_Corp:$scope.ManagerInfo.PK_Corp},'PSTClientService','project.get','','Order','GET',false).success(function(data){
                         $scope.ProjectInfo=JSON.parse(data.message).Body.Project;
                     });
-                });
+                });}catch(e){
+                    alert('基础数据获取失败！');
+                    window.localStorage.setItem('Error',e.message);
+                }
                 //获取产品线数据
-                orderservice.getCpsxData().success(function(data){
+                Itapi.getData({},'PSTClientService','productLine.getAll','','Order','GET',false).success(function(data){
                     $scope.ProductLineData=JSON.parse(data.message).Body.ProductLine;
                 });
-                orderservice.getCpData().success(function(data){
+                //获取产品
+                Itapi.getData({},'PSTClientService','product.getAll','','Order','GET',false).success(function(data){
                     $scope.ProductData=JSON.parse(data.message).Body.Product;
                 });
                 //获取合同类型
-                orderservice.getOptions("037").success(function (data) {
+                Itapi.getData({PK_Dictionary:'037'},'PSTClientService','dictionary.getOption','','Order','GET',false).success(function(data){
                     $scope.ContractData=JSON.parse(data.message).Body.DictionaryOption;
                 });
                 //获取基础数据中的销售类型
-                orderservice.getOptions("003").success(function (data) {
-                    $scope.SaleType=JSON.parse(data.message).Body.DictionaryOption
+                Itapi.getData({PK_Dictionary:'003'},'PSTClientService','dictionary.getOption','','Order','GET',false).success(function(data){
+                    $scope.SaleType=JSON.parse(data.message).Body.DictionaryOption;
                 });
                 //获取基础数据中的应用类型
-                orderservice.getOptions("048").success(function (data) {
+                Itapi.getData({PK_Dictionary:'048'},'PSTClientService','dictionary.getOption','','Order','GET',false).success(function(data){
                     $scope.SaleTypeModel=JSON.parse(data.message).Body.DictionaryOption;
                 });
                 /**********************行定义事件*********************/
@@ -149,11 +157,8 @@ define([
                     for(var i=0; i<Orders.length;i++){
                         if(Orders[i].Id === item.Id){
                             Orders[i].ProductLineName=item.ProductLineName;
-                            //Orders[i].ProductLineId=productlimemodel.ProductLineID;
                             Orders[i].ProductName=item.ProductName;
-                           // Orders[i].ProductID=prodoctmodel.ProductID;
                             Orders[i].ProductModuleName=item.ProductModuleName;
-                            //Orders[i].ProductModuleID=prodoctmoduleModel.ProductModuleID;
                             Orders[i].AcutalMoney=item.AcutalMoney;
                             Orders[i].StandardMoney=item.StandardMoney;
                             Orders[i].Discount=item.Discount;
@@ -232,7 +237,7 @@ define([
 
                 //产品下拉时触发加载产品模块方法
                 function getProductModel(item){
-                    orderservice.getProductModule(item.ProductName.ProductID).success(function(data){
+                    Itapi.getData({ProductID:item.ProductName.ProductID},'PSTClientService','productModule.getByProduct','','Order','GET',false).success(function(data){
                         var tempdata=JSON.parse(data.message).Body.ProductModule;
                         if(tempdata!=null||tempdata!=undefined){
                             item.ProductModuleName=undefined;
@@ -249,18 +254,17 @@ define([
                 }
                 //展示数据
                 function showOrder(){
-                    console.log($scope.productLine.selected)
-                    console.log($scope.saleType.selected)
-                    console.log($scope.saleTypeModel.selected)
-
+                    //产品线不能为空
                     if($scope.productLine.selected==undefined){
                         alert("请选择合同类型！");
                         return;
                     }
+                    //产品类型不能为空
                     if($scope.saleType.selected==undefined){
                         alert("请选择应用类型！");
                         return;
                     }
+                    //产品模块不能为空
                     if($scope.saleTypeModel.selected==undefined){
                         alert("请选择销售模式！");
                         return;
@@ -279,11 +283,10 @@ define([
                     $scope.isDetailShow.isShow=true;
                     $scope.isSubmit.isShow=false;
                     var content ={};
-                    console.log($scope.ProjectInfo);
                     content.PK_Project=$scope.ProjectInfo.PK_Project;
                     content.ProjectCode=$scope.ProjectInfo.ProjectCode;
                     content.ProjectName=$scope.ProjectName;
-                    content.ClientID=ClientId;
+                    content.ClientID=$scope.ClientId.selected.ClientID;
                     content.StandardMoney=$scope.RelQuoteMoney;
                     content.AcutalMoney=$scope.RelCoustMoney;
                     content.Discount=$scope.RelDiscountMoney;
@@ -305,10 +308,15 @@ define([
                     content.Remark='';
                     content.Orders=ChangeOrder(Orders);
                     console.log(content);
-                    orderservice.projetUpdate(content).success(function(data){
+                    Itapi.getData({ProjectData:JSON.stringify(content)},'PSTClientService','project.update','','Order','POST',false).success(function(data){
                         console.log(data);
+                        if(JSON.parse(data.message).Description=='项目信息保存成功'){
+                            $scope.isDetailShow.isShow=true;
+                            $scope.isSubmit.isShow=false;
+                        }else{
+                            alert('订单保存失败！');
+                        }
                     });
-                    console.log(JSON.stringify(content));
                     Orders=[];
                     tempOrders=[];
                     $scope.tableParams.settings().dataset=angular.copy(Orders);

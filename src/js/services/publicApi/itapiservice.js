@@ -32,20 +32,20 @@ define([
                     console.log('参数必须为对象');
                     return '参数必须为对象'
                 }
+                if(callName==''||callName==undefined||callName==null){
+                    console.log('请填写调用名称');
+                    return '请填写调用名称';
+                }
+                if(apiName==''||apiName==undefined||apiName==null){
+                    console.log('调用方法不能为空');
+                    return '调用方法不能为空';
+                }
                 if(edition==null||edition==undefined||edition==''){
                     //版本为空时，采用默认的版本号
                     edition='1.0';
                 }else if(edition.indexOf('.')<0){
                     //当版本为整数时
                     edition=edition+'.0';
-                }
-                if(apiName==''||apiName==undefined||apiName==null){
-                    console.log('调用方法不能为空');
-                    return '调用方法不能为空';
-                }
-                if(callName==''||callName==undefined||callName==null){
-                    console.log('请填写调用名称');
-                    return '请填写调用名称';
                 }
                 if(oauthName==''||oauthName==undefined||oauthName==null){
                     console.log('请填写oatuth名称');
@@ -57,7 +57,7 @@ define([
                 var urls=baseUrl+callName+'/'+edition+'/'+apiName+'?resultType=json'+(getPar==''?'&':getPar)+'&oauth='+token+'&appKey='+oauths.appKey+'&timestamp='+time;
                 if (requestmethod==''||requestmethod.toLowerCase()=='get'||requestmethod==undefined||requestmethod==null){
                     return $http.get(urls);
-                }else if(!isStream){
+                }else if(isStream){
                     var urls=baseUrl+callName+'/'+edition+'/'+apiName;
                     paramas.resultType='json';
                     paramas.oauth=token;
@@ -70,7 +70,7 @@ define([
                     paramas.appKey=oauths.appKey;
                     paramas.timestamp=time;
                     return  $http({
-                        url:baseUrl,
+                        url:baseUrl+callName+'/'+edition+'/'+apiName,
                         method:'POST',
                         data:paramas,
                         headers:{'Content-Type':'application/x-www-form-urlencoded' },

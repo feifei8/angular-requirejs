@@ -23,17 +23,10 @@
 
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <label>选择客户：</label>
-                            <div class="form-group">
-                            <ui-select ng-model="ClientId.selected" theme="select2" class="form-control" ng-change="getProjectInfo()">
-                                <ui-select-match>{{$select.selected.ClientName}}</ui-select-match>
-                                <ui-select-choices repeat="item in ClientInfo | filter:$select.search">
-                                    <span ng-bind-html="item.ClientName" ng-bind="item.ClientName"></span>
-                                </ui-select-choices>
-                            </ui-select>
-                        </div>
-                        </td>
+                       <td colspan="2">
+                        <label>选择客户：</label>
+                           <select class="form-control select2" ng-model="ClientId" ng-options="client.ClientID as client.ClientName for client in ClientInfo" ng-change="getProjectInfo(ClientId)"></select>
+                       </td>
                     </tr>
                     <tr>
                         <td>
@@ -55,37 +48,29 @@
                         <td  >
                             <div class="form-group">
                                 <lable>合同类型：</lable>
-                                <ui-select  ng-model="productLine.selected"  theme="select2" class="form-control">
-                                    <ui-select-match>{{$select.selected.OptionText}}</ui-select-match>
-                                    <ui-select-choices repeat="item in ContractData | filter:$select.search">
-                                        <span ng-bind-html="item.OptionText" ng-bind="item.OptionText"></span>
-                                    </ui-select-choices>
-                                </ui-select>
+                                <select  class="form-control select2" style="width:100%;" ng-model="productLine" ng-options="contract.OptionText as contract.OptionText for contract in ContractData">
+
+                                </select>
+
                             </div>
 
                         </td>
                         <td  >
                             <div class="form-group">
                                 <lable>应用类型：</lable>
-                                <ui-select ng-model="saleType.selected" theme="select2" class="form-control">
-                                    <ui-select-match>{{$select.selected.OptionText}}</ui-select-match>
-                                    <ui-select-choices repeat="item in SaleType | filter:$select.search">
-                                        <span ng-bind-html="item.OptionText" ng-bind="item.OptionText"></span>
-                                    </ui-select-choices>
-                                </ui-select>
+                                <select  class="form-control select2" style="width: 100%;" ng-model="saleType" ng-options="saleType.OptionText as saleType.OptionText for saleType in SaleType"></select>
+
+                                </select>
+
                             </div>
                         </td>
 
                         <td >
                             <div class="form-group">
                                 <lable>销售模式：</lable>
-                                <ui-select ng-model="saleTypeModel.selected" theme="select2" class="form-control">
-                                    <ui-select-match>{{$select.selected.OptionText}}</ui-select-match>
-                                    <ui-select-choices repeat="item in SaleTypeModel | filter:$select.search">
-                                        <span ng-bind-html="item.OptionText" ng-bind="item.OptionText"></span>
-                                    </ui-select-choices>
-                                </ui-select>
+                                <select  class="form-control select2" style="width: 100%;" ng-model="saleTypeModel" ng-options="saleTypeModel.OptionText as saleTypeModel.OptionText for saleTypeModel in SaleTypeModel"></select>
 
+                                </select>
 
                             </div>
                             <!-- /input-group -->
@@ -148,37 +133,29 @@
                             <tr ng-repeat="item in $data" ng-form="itemForm" tracked-table-row="item">
                                 <td data-title="'产品线'" sortable="'ProductLineName'" ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="ProductLineName.$dirty ? 'bg-warning' : ''" ng-form="ProductLineName"
                                     tracked-table-cell>
-                                    <span ng-switch-default class="editable-text" ng-bind="item.ProductLineName.ProductLineName"></span>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.ProductLineName"></span>
                                     <div class="controls" ng-class="ProductLineName.$invalid && ProductLineName.$dirty ? 'has-error' : ''" ng-switch-when="true">
-                                        <ui-select name="ProductLineName" ng-model="item.ProductLineName" theme="select2" class="form-control">
-                                            <ui-select-match>{{$select.selected.ProductLineName}}</ui-select-match>
-                                            <ui-select-choices repeat="items in ProductLineData | filter:$select.search">
-                                                <span ng-bind-html="items.ProductLineName" ng-bind="items.ProductLineName"></span>
-                                            </ui-select-choices>
-                                        </ui-select>
+                                        <select name="ProductLineName" ng-model="item.ProductLineName" class="form-control"
+                                                ng-options="cpx.ProductLineName as cpx.ProductLineName for cpx in ProductLineData" ng-selected="item.ProductLineName == cpx.ProductLineName">
+                                        </select>
                                     </div>
                                 </td>
                                 <td data-title="'产品'"  sortable="'ProductName'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="ProductName.$dirty ? 'bg-warning' : ''" ng-form="ProductName" tracked-table-cell>
-                                    <span ng-switch-default class="editable-text" ng-bind="item.ProductName.ProductName"></span>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.ProductName"></span>
                                     <div class="controls" ng-class="ProductName.$invalid && ProductName.$dirty ? 'has-error' : ''" ng-switch-when="true">
-                                        <ui-select name="ProductName" ng-model="item.ProductName" theme="select2" class="form-control"  ng-change="getProductModel(item)">
-                                            <ui-select-match>{{$select.selected.ProductName}}</ui-select-match>
-                                            <ui-select-choices repeat="items in ProductData | filter:$select.search">
-                                                <span ng-bind-html="items.ProductName" ng-bind="items.ProductName"></span>
-                                            </ui-select-choices>
-                                        </ui-select>
+                                        <select name="ProductName" ng-model="item.ProductName" class="form-control"
+                                                ng-change="getProductModel(item.ProductName)" ng-options="propduct.ProductName as propduct.ProductName for propduct in ProductData"
+                                                ng-selected="item.ProductName==propduct.ProductName">
+                                        </select>
                                     </div>
                                 </td>
                                 <td data-title="'产品模块'"  sortable="'ProductModuleName'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="ProductModuleName.$dirty ? 'bg-warning' : ''" ng-form="ProductModuleName"
                                     tracked-table-cell>
-                                    <span ng-switch-default class="editable-text" ng-bind="item.ProductModuleName.ProductModuleName"></span>
+                                    <span ng-switch-default class="editable-text" ng-bind="item.ProductModuleName"></span>
                                     <div class="controls" ng-class="ProductModuleName.$invalid && ProductModuleName.$dirty ? 'has-error' : ''" ng-switch-when="true">
-                                        <ui-select name="ProductModuleName" ng-model="item.ProductModuleName" theme="select2" class="form-control">
-                                            <ui-select-match>{{$select.selected.ProductModuleName}}</ui-select-match>
-                                            <ui-select-choices repeat="items in ProductModelData | filter:$select.search">
-                                                <span ng-bind-html="items.ProductModuleName" ng-bind="items.ProductModuleName"></span>
-                                            </ui-select-choices>
-                                        </ui-select>
+                                        <select name="ProductModuleName" ng-model="item.ProductModuleName" class="form-control" ng-options="propductmodule.ProductModuleName as propductmodule.ProductModuleName for propductmodule in ProductModelData"
+                                                ng-selected="item.ProductModuleName==propductmodule.ProductmoduleName">
+                                        </select>
                                     </div>
                                 </td>
                                 <td data-title="'报价'"  sortable="'StandardMoney'"  ng-switch="item.isEditing || ($first && isEditing.isEditing)" ng-class="StandardMoney.$dirty ? 'bg-warning' : ''" ng-form="StandardMoney" tracked-table-cell>
