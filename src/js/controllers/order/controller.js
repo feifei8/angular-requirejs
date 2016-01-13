@@ -60,6 +60,7 @@ define([
                 var Orders=[];//订单对象
                 var OrderManager={};
                 var tempOrders=[];//临时订单数据，用于存储临撤销之前的订单数据。
+                var OrderHistorys={};
                // var ClientId='HQ20120316000083'//暂定以后采用登录人获取方式
 
                 /********************定义前端调用方法*******************/
@@ -75,7 +76,18 @@ define([
                 $scope.rowDel=rowDel;
                 $scope.changeDiscount=changeDiscount;
                 /******************数据获取******************/
-
+                var OrderHistory=window.localStorage.getItem('OrderHistory');
+                if(OrderHistory!=null|OrderHistory!=undefined){
+                   // console.log(JSON.parse(OrderHistory));
+                    var temp =OrderHistory.split('|');
+                    console.log(JSON.parse(temp[0]));
+                    for(var i=0;i<temp.length;i++){
+                        if(temp[i]!='')
+                        {
+                            $scope.AllOrderManagerList.unshift(JSON.parse(temp[i]));
+                        }
+                    }
+                }
                 //获取当前登录人员信息
                 try{
                 Itapi.getData({Keyword:'zhanglja'},'MDMPersonService','employee.getByKeyword','','Order','GET',false).success(function(data){
@@ -269,6 +281,9 @@ define([
                         alert("请选择销售模式！");
                         return;
                     }
+                    if(Orders==null|Orders==undefined|Orders.length==0){
+                        return;
+                    }
                     OrderManager={};
                     OrderManager.Orders=ChangeOrder();
                     OrderManager.OrderId=parseInt(Math.random()*100000000);
@@ -279,6 +294,9 @@ define([
                     OrderManager.RelQuoteMoney=$scope.RelQuoteMoney;
                     OrderManager.RelDiscountMoney=$scope.RelDiscountMoney;
                     $scope.AllOrderManagerList.unshift(OrderManager);
+                    OrderHistorys=window.localStorage.getItem('OrderHistory');
+                    OrderHistorys+=JSON.stringify(OrderManager)+"|";
+                    window.localStorage.setItem('OrderHistory',OrderHistorys);
                     console.log($scope.AllOrderManagerList);
                     $scope.isDetailShow.isShow=true;
                     $scope.isSubmit.isShow=false;
@@ -307,14 +325,14 @@ define([
                     content.Requirement='';
                     content.Remark='';
                     content.Orders=ChangeOrder(Orders);
-                    console.log(content);
-                    Itapi.getData({ProjectData:JSON.stringify(content)},'PSTClientService','project.update','','Order','POST',false).success(function(data){
+                   Itapi.getData({ProjectData:JSON.stringify(content)},'PSTClientService','project.update','','Order','POST',false).success(function(data){
                         console.log(data);
                         if(JSON.parse(data.message).Description=='项目信息保存成功'){
                             $scope.isDetailShow.isShow=true;
                             $scope.isSubmit.isShow=false;
+                            alert('项目创建成功！');
                         }else{
-                            alert('订单保存失败！');
+                            alert('项目创建成功成功，同步未完成！');
                         }
                     });
                     Orders=[];
