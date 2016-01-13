@@ -283,6 +283,7 @@ define([
                     }
                     if(Orders==null|Orders==undefined|Orders.length==0){
                         alert('请不要提交空订单！');
+                        /*其他逻辑慢慢修补*/
                         return;
                     }
                     OrderManager={};
